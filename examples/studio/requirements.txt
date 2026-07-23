@@ -1,4 +1,6 @@
-# Para desplegar el Studio (Railway u otro). Instala el paquete del monorepo + extras.
--e ../../packages/py[api,ingest]
+# NOTA: en Railway el build se hace desde la RAÍZ del repo (Root Directory vacío),
+# usando /requirements.txt + /nixpacks.toml. Este archivo es solo para correr el
+# Studio localmente desde esta carpeta:
+#   pip install -e ../../packages/py[api,ingest] python-multipart uvicorn
 python-multipart>=0.0.9
 uvicorn[standard]>=0.30

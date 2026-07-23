@@ -30,14 +30,23 @@ Listo: el CI (`.github/workflows/ci.yml`) corre las pruebas en cada push.
 
 ## 2. Backend en Railway (FastAPI + Postgres)
 
+El build se hace **desde la raíz del repo** (no desde `examples/studio`), porque el
+Studio instala el paquete `packages/py`. La raíz trae `requirements.txt` y
+`nixpacks.toml` que lo resuelven.
+
 1. **railway.app** → *New Project* → *Deploy from GitHub repo* → elige el repo.
-2. **Root Directory:** `examples/studio` (o tu propia app que monte `make_router`).
-3. **Build:** `pip install -e ../../packages/py[api,ingest] && pip install python-multipart uvicorn`
-   (o añade un `requirements.txt`).
-4. **Start:** `uvicorn app:app --host 0.0.0.0 --port $PORT`
-5. **Base de datos:** *New* → *Database* → *PostgreSQL*. Railway inyecta `DATABASE_URL`.
-6. **Variables:** `ANALYTICS_DB_URL=$DATABASE_URL` (y las de `yd/` cuando integres auth).
-7. Railway te da una URL: será tu API (`api.analytics.yachaydeep.com` al añadir dominio).
+2. **Root Directory:** **vacío** (la raíz del repo). *(No pongas `examples/studio`: desde
+   ahí el build no ve `packages/py` y falla.)*
+3. Railway detecta Python por `/requirements.txt` (que instala `./packages/py[api,ingest]`)
+   y usa `/nixpacks.toml` para arrancar:
+   `uvicorn app:app --app-dir examples/studio --host 0.0.0.0 --port $PORT`.
+4. **Base de datos:** *New* → *Database* → *PostgreSQL*. Railway inyecta `DATABASE_URL`.
+5. **Variables** (servicio del Studio): `ANALYTICS_DB_URL = ${{Postgres.DATABASE_URL}}`.
+6. **Networking → Generate Domain** (o *Custom Domain* `api.analytics.yachaydeep.com`).
+
+> Si prefieres Root Directory = `examples/studio`, tendrías que empaquetar `yd-analytics`
+> aparte (git/PyPI) porque el build no alcanza `../../packages`. El camino de arriba
+> (build desde la raíz) es el simple.
 
 ## 3. Frontend / landing en Vercel
 

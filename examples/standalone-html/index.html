@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Yachay Deep Analytics — convierte datos en decisiones</title>
+<meta name="description" content="Convierte cualquier dato cuantitativo, de cualquier sector, en tableros y reportes dinámicos. Sube tu Excel o conecta tu base y obtén dashboards sin código ni DAX." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700;800&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{--brand:#1B3A6B;--brand-dark:#0F2444;--brand-light:#2B5AA0;--gold:#E8A838;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--bg:#f4f5f2;--surface:#fff;--border:#e1e0d9}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Instrument Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  header{background:linear-gradient(120deg,var(--brand-dark),var(--brand));color:#fff}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+  .brand{font-weight:800;letter-spacing:.02em}
+  .brand small{display:block;font-weight:500;font-size:11px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase}
+  .cta{background:var(--gold);color:var(--brand-dark);font-weight:700;padding:9px 16px;border-radius:10px}
+  .hero{padding:56px 0 64px}
+  .eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.25em;color:var(--gold);font-weight:700}
+  h1{font-size:40px;line-height:1.08;margin:.2em 0 .3em;font-weight:800;max-width:14ch}
+  .hero p{font-size:17px;color:#dbe6f7;max-width:60ch;line-height:1.55}
+  .hero .row{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap}
+  .btn{padding:11px 18px;border-radius:11px;font-weight:700}
+  .btn.p{background:var(--gold);color:var(--brand-dark)}
+  .btn.s{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25)}
+  section{padding:44px 0}
+  h2{font-size:24px;font-weight:800;margin:0 0 6px}
+  .lead{color:var(--ink2);max-width:70ch;margin:0 0 20px}
+  .feat{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:760px){.feat{grid-template-columns:1fr}h1{font-size:32px}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px}
+  .card h3{margin:0 0 4px;font-size:15px}
+  .card p{margin:0;font-size:13.5px;color:var(--ink2);line-height:1.5}
+  .demos{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media(max-width:760px){.demos{grid-template-columns:1fr}}
+  .demo{display:block;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;transition:transform .08s,border-color .08s}
+  .demo:hover{transform:translateY(-2px);border-color:var(--brand-light)}
+  .demo .k{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);font-weight:700}
+  .demo h4{margin:4px 0 3px;font-size:14.5px}
+  .demo p{margin:0;font-size:12.5px;color:var(--ink2)}
+  footer{padding:28px 0;color:var(--muted);font-size:13px;border-top:1px solid var(--border);margin-top:20px}
+  code{font-family:"Spline Sans Mono";font-size:12px;background:#eef1f5;padding:1px 5px;border-radius:5px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="nav">
+      <div class="brand">Yachay Deep<small>Analytics</small></div>
+      <a class="cta" href="#demos">Ver demos</a>
+    </div>
+    <div class="hero">
+      <div class="eyebrow">un producto de Yachay Deep</div>
+      <h1>Convierte cualquier dato en decisiones.</h1>
+      <p>Sube tu Excel o conecta tu base y obtén tableros y reportes dinámicos —
+      de <b>cualquier sector</b>: educación, turismo, empresa, salud, finanzas.
+      Sin escribir código ni DAX. Se integra dentro de tus apps o funciona en autoservicio.</p>
+      <div class="row">
+        <a class="btn p" href="#demos">Explorar el catálogo</a>
+        <a class="btn s" href="gallery-demo.html">Ver la galería de gráficos</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="wrap">
+  <h2>Qué hace</h2>
+  <p class="lead">Un mismo sistema que entiende la forma de tus datos y elige la mejor manera de mostrarlos.</p>
+  <div class="feat">
+    <div class="card"><h3>Entiende y grafica solo</h3><p>Infiere el tipo de cada columna y propone el tablero; el resolver elige el gráfico correcto por la forma del dato.</p></div>
+    <div class="card"><h3>Sube o conecta datos</h3><p>Limpia y normaliza tus Excel/CSV, o consulta tu PostgreSQL. Detecta las relaciones entre tablas sin DAX ni Power Pivot.</p></div>
+    <div class="card"><h3>Pregunta en tu idioma</h3><p>Escribe «ventas por ciudad» y obtén el gráfico. Interactivo, accesible, con la marca de tu producto.</p></div>
+  </div>
+</section>
+
+<section class="wrap" id="demos">
+  <h2>Demos en vivo</h2>
+  <p class="lead">Todo corre en el navegador, sin instalar nada.</p>
+  <div class="demos">
+    <a class="demo" href="powerbi-demo.html"><div class="k">Tablero</div><h4>Cross-highlighting</h4><p>Clic en cualquier visual y todo el reporte resalta, como Power BI.</p></a>
+    <a class="demo" href="gallery-demo.html"><div class="k">Catálogo</div><h4>Galería de gráficos</h4><p>Todos los tipos con paleta accesible, en claro y oscuro.</p></a>
+    <a class="demo" href="ask-demo.html"><div class="k">IA</div><h4>Pregúntale a tus datos</h4><p>Lenguaje natural → métrica + gráfico.</p></a>
+    <a class="demo" href="ingest-demo.html"><div class="k">Datos</div><h4>Sube y limpia</h4><p>Excel/CSV → limpieza + esquema + tablero propuesto.</p></a>
+    <a class="demo" href="model-editor-demo.html"><div class="k">Modelo</div><h4>Editor de relaciones</h4><p>Conecta tablas como en Power Pivot, pero automático.</p></a>
+    <a class="demo" href="builder-demo.html"><div class="k">Sin código</div><h4>Constructor de tablero</h4><p>Elige métrica y desglose → panel → exporta.</p></a>
+    <a class="demo" href="vosviewer-demo.html"><div class="k">Redes</div><h4>Grafo estilo VOSviewer</h4><p>Relaciones con clúster y overlay continuo.</p></a>
+    <a class="demo" href="graph-demo.html"><div class="k">Grafo</div><h4>Prerrequisitos</h4><p>Red de nodos con cadena de dependencias.</p></a>
+    <a class="demo" href="dashboard-demo.html"><div class="k">Base</div><h4>Tablero interactivo</h4><p>KPIs, series y filtros cruzados.</p></a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Yachay Deep · Cayambe, Ecuador · <code>analytics.yachaydeep.com</code> — un producto de Yachay Deep.
+    <br/>Para el modo autoservicio (subir tu propia data), conecta esta landing con el Studio.
+  </div>
+</footer>
+</body>
+</html>
