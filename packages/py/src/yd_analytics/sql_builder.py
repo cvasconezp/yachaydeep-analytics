@@ -77,8 +77,10 @@ def build(spec: MetricSpec, query: MetricQuery) -> tuple[str, dict]:
     if query.limit and dims:
         sql += f" LIMIT {int(query.limit)}"
 
-    # 6) Parámetros de medida (p. ej. :umbral) que aparezcan en el SQL.
-    for k, v in query.params.items():
+    # 6) Parámetros de medida (p. ej. :umbral): los de la consulta y, si faltan,
+    #    los valores por defecto declarados en la métrica.
+    merged = {**spec.param_defaults, **query.params}
+    for k, v in merged.items():
         if f":{k}" in sql:
             params[k] = v
 

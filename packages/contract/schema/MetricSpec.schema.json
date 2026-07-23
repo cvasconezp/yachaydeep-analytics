@@ -122,6 +122,11 @@
       "default": null,
       "title": "Modelo"
     },
+    "param_defaults": {
+      "additionalProperties": true,
+      "title": "Param Defaults",
+      "type": "object"
+    },
     "roles": {
       "items": {
         "type": "string"

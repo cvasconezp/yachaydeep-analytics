@@ -32,3 +32,8 @@ versionado SemVer. El contrato manda: un cambio incompatible es *major*.
 - **Mapa coroplético de Ecuador** (`ChoroplethView` + GeoJSON de provincias) y el
   clúster VOSviewer, ambos integrados en `gallery-demo`.
 - `registry.register()` para que las apps añadan sus métricas.
+- **Ingesta de Excel/CSV** (`ingest`, extra `[ingest]`): limpia y normaliza
+  (encabezados, tipos, montos es-EC, duplicados, vacíos), carga y perfila. Con test.
+- **Buscador de lenguaje natural**: endpoint `POST /analytics/assist` (usa `assist_llm`
+  como Cerebras/Kimi o reglas offline) y demo `ask-demo.html`.
+- `MetricSpec.param_defaults` (valores por defecto de la medida, p. ej. `umbral`).

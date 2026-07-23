@@ -50,9 +50,10 @@ npm --workspace example-vite-app run dev
 ```
 
 **Solo mirar:** abre cualquier archivo de `examples/standalone-html/`
-(`dashboard-demo`, `powerbi-demo`, `graph-demo`, `vosviewer-demo`, **`gallery-demo`**)
-— traen ECharts incrustado y corren sin servidor. `gallery-demo` muestra todo el
-catálogo de gráficos con la paleta validada, en claro y oscuro.
+(`dashboard-demo`, `powerbi-demo`, `graph-demo`, `vosviewer-demo`, **`gallery-demo`**,
+**`ask-demo`**) — traen ECharts incrustado y corren sin servidor. `gallery-demo`
+muestra todo el catálogo con la paleta validada en claro/oscuro; `ask-demo` es el
+buscador «pregúntale a tus datos».
 
 ## Cómo lo consume una app (Core / Áncora / Kullki)
 
@@ -80,6 +81,29 @@ p.columns     # tipo semántico de cada campo (temporal, categórico, numérico,
 p.metrics     # métricas candidatas (conteo, promedios…)
 p.dashboard   # DashboardSpec inicial, listo para revisar y afinar
 ```
+
+## ¿Tienes Excel? Ingesta + limpieza en un paso
+
+```python
+from yd_analytics import ingest          # requiere el extra [ingest] (pandas)
+rep = ingest("aportes.xlsx", engine, "aportes")
+rep.issues     # ["encabezados normalizados", "3 duplicados eliminados", …]
+rep.columns    # tipos inferidos de cada columna ya limpia
+rep.profile    # métricas y DashboardSpec propuestos sobre los datos limpios
+```
+
+Lee Excel/CSV, normaliza encabezados y tipos (incluye montos es-EC), quita vacíos y
+duplicados, carga a la BD y perfila — listo para graficar.
+
+## Pregúntale a tus datos (asistencia)
+
+```python
+from yd_analytics import interpret, openai_compatible_llm
+llm = openai_compatible_llm("https://api.cerebras.ai/v1", KEY, "llama-3.3-70b")  # o Kimi
+sug = interpret("¿riesgo por carrera?", llm=llm)   # → MetricQuery + gráfico sugerido
+```
+
+Endpoint listo: `POST /analytics/assist {"question": "..."}`. Sin LLM usa reglas offline.
 
 ## Documentación
 

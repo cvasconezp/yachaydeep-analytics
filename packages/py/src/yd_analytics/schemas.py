@@ -56,6 +56,9 @@ class MetricSpec(BaseModel):
     dim_temporal: str | None = None
     cadencia: Literal["on-read", "hourly", "daily"] = "on-read"
     modelo: dict[str, str] | None = None
+    # Valores por defecto de los parámetros de la medida (p. ej. {"umbral": 0.7}),
+    # usados cuando la consulta no los provee (asistencia, tableros automáticos).
+    param_defaults: dict[str, Any] = Field(default_factory=dict)
     roles: list[str] = Field(default_factory=lambda: ["*"])
     # --- Privacidad / cifrado (ver docs de seguridad) --- #
     # Para una dimensión cifrada, la columna del índice ciego (blind index) que

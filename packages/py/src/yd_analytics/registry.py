@@ -45,6 +45,7 @@ _SPECS: dict[str, MetricSpec] = {
             },
             grano=["periodo", "carrera", "jornada"],
             dim_temporal="periodo",
+            param_defaults={"umbral": 0.7},
             modelo={"nombre": "early_warning", "version": "v3"},
             roles=["docente", "coordinador", "admin"],
             version="v2",

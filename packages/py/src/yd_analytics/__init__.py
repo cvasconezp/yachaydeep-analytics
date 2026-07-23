@@ -33,7 +33,7 @@ __version__ = "0.1.0"
 
 __all__ = [
     "run_query", "run_graph", "profile", "interpret", "openai_compatible_llm",
-    "to_csv", "make_router",
+    "ingest", "to_csv", "make_router",
     "registry", "resolver", "graph",
     "MetricQuery", "MetricResult", "MetricSpec", "ChartSpec", "Filter",
     "GraphSpec", "GraphNode", "GraphEdge", "GraphResult", "PanelResponse",
@@ -59,3 +59,10 @@ def make_router(**kwargs):
     si solo se usa el motor). Ver yd_analytics.router.make_router."""
     from .router import make_router as _mk
     return _mk(**kwargs)
+
+
+def ingest(*args, **kwargs):
+    """Ingesta y limpieza de Excel/CSV → tabla + perfil (import diferido: requiere
+    el extra `[ingest]` con pandas/openpyxl). Ver yd_analytics.ingest.ingest."""
+    from .ingest import ingest as _ing
+    return _ing(*args, **kwargs)

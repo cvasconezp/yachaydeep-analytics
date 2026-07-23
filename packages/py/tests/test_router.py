@@ -45,3 +45,14 @@ def test_graph_endpoint(engine):
                headers={"X-Demo-Role": "admin"})
     assert r.status_code == 200
     assert len(r.json()["nodes"]) == 4
+
+
+def test_assist_endpoint(engine):
+    c = _client(engine)
+    r = c.post("/analytics/assist", json={"question": "estudiantes en riesgo por carrera"},
+               headers={"X-Demo-Role": "coordinador"})
+    assert r.status_code == 200
+    body = r.json()
+    assert body["suggestion"]["metric"] == "estudiantes_en_riesgo"
+    assert body["suggestion"]["dimensions"] == ["carrera"]
+    assert body["chart"]["type"] in ("bar", "bar_h")
