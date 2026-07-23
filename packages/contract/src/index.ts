@@ -10,7 +10,8 @@ export type Shape =
   | "timeseries_multi" | "distribution" | "correlation" | "matrix" | "funnel" | "table";
 export type ChartType =
   | "kpi" | "line" | "area" | "bar" | "bar_h" | "stacked_bar" | "treemap"
-  | "scatter" | "heatmap" | "funnel" | "table" | "graph";
+  | "scatter" | "heatmap" | "funnel" | "table" | "graph"
+  | "pie" | "histogram" | "boxplot";
 export type FilterOp = "eq" | "in" | "gte" | "lte" | "between";
 
 export interface Measure { sql: string; }

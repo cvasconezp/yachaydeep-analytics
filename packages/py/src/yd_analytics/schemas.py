@@ -29,7 +29,7 @@ Shape = Literal[
 Formato = Literal["number", "money", "percent", "impact"]
 ChartType = Literal[
     "kpi", "line", "area", "bar", "bar_h", "stacked_bar", "treemap",
-    "scatter", "heatmap", "funnel", "table",
+    "scatter", "heatmap", "funnel", "table", "pie", "histogram", "boxplot",
 ]
 FilterOp = Literal["eq", "in", "gte", "lte", "between"]
 

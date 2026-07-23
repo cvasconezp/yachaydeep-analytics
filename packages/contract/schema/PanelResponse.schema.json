@@ -14,7 +14,10 @@
             "scatter",
             "heatmap",
             "funnel",
-            "table"
+            "table",
+            "pie",
+            "histogram",
+            "boxplot"
           ],
           "title": "Type",
           "type": "string"

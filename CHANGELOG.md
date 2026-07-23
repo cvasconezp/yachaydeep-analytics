@@ -12,5 +12,13 @@ versionado SemVer. El contrato manda: un cambio incompatible es *major*.
   por rol, **profiler** de auto-perfilado y factoría `make_router`.
 - **@yachaydeep/dashboard** (React) — `Dashboard`, `Panel`, `NetworkView`
   (estilo VOSviewer, modos *cluster* y *overlay*), hooks y formateador es-EC.
-- Ejemplos: backend FastAPI, app Vite y cuatro demos HTML autocontenidos.
-- Docs: `DASHBOARD.md` (arquitectura) y `DISTRIBUCION.md` (paquetes y consumo).
+- **Sistema de diseño de gráficos**: paleta categórica **validada** con
+  `scripts/validate_palette.js` (sin violeta, segura para daltonismo en claro y
+  oscuro), `palette.ts`, y catálogo ampliado en `chartOptions.ts` (dona, apiladas,
+  treemap, dispersión, histograma, embudo). Resolver ampliado a las formas
+  `part_to_whole`, `distribution`, `correlation`, `funnel` (+ `ChartType` con
+  `pie`/`histogram`/`boxplot`). Guiado por las skills `dataviz` y `design-system`.
+- Ejemplos: backend FastAPI, app Vite y **cinco** demos HTML autocontenidos
+  (incluye `gallery-demo` con todo el catálogo en claro/oscuro).
+- Docs: `DASHBOARD.md` (arquitectura), `DISTRIBUCION.md` (paquetes y consumo) y
+  `DESIGN-SYSTEM.md` (tokens, paleta validada, catálogo, estados, accesibilidad).

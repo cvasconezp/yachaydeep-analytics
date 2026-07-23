@@ -9,6 +9,7 @@
 */
 import type { ChartSpec, MetricResult, Formato } from "./types";
 import { money, number as fmtNumber, percent } from "./format"; // formateador único de casa (es-EC)
+import { categorical, SEQUENTIAL, type Mode } from "./palette";
 
 const css = (v: string, fallback: string) =>
   (typeof getComputedStyle !== "undefined"
@@ -19,6 +20,8 @@ const PRIMARY = () => css("--brand-primary", "#1B3A6B");
 const ACCENT = () => css("--brand-accent", "#E8A838");
 const INK = () => css("--ink", "#11182a");
 const MUTED = () => css("--muted", "#6B7280");
+const mode = (): Mode => (css("--yd-mode", "light") === "dark" ? "dark" : "light");
+const CAT = () => categorical(mode());
 
 export function fmt(value: number, formato: Formato): string {
   if (formato === "money") return money(value);
@@ -83,6 +86,81 @@ export function toEChartsOption(chart: ChartSpec, result: MetricResult) {
     };
   }
 
-  // fallback: tabla
+  if (chart.type === "pie") {
+    const cat = chart.encoding.x?.field ?? result.columns[0];
+    return {
+      tooltip: { trigger: "item", formatter: (p: any) => `${p.name}: ${axisFmt(p.value)} (${p.percent}%)` },
+      legend: { bottom: 0 },
+      series: [{
+        type: "pie", radius: ["48%", "72%"], avoidLabelOverlap: true,
+        itemStyle: { borderColor: css("--surface", "#fff"), borderWidth: 2 },
+        label: { color: INK() },
+        data: rows.map((r, i) => ({ name: r[cat], value: r.valor, itemStyle: { color: CAT()[i % CAT().length] } })),
+      }],
+    };
+  }
+
+  if (chart.type === "stacked_bar") {
+    // parte-de-un-todo por categoría (una serie por columna extra, o total apilado 100%)
+    const cat = chart.encoding.x.field;
+    return {
+      grid: { left: 44, right: 16, top: 28, bottom: 40 }, legend: { top: 0 },
+      tooltip: { trigger: "axis", valueFormatter: axisFmt },
+      xAxis: { type: "category", data: rows.map((r) => r[cat]) },
+      yAxis: { type: "value", axisLabel: { formatter: axisFmt } },
+      series: [{ type: "bar", stack: "s", data: rows.map((r) => r.valor),
+        itemStyle: { color: CAT()[0], borderColor: css("--surface", "#fff"), borderWidth: 1 } }],
+    };
+  }
+
+  if (chart.type === "treemap") {
+    const cat = chart.encoding.x?.field ?? result.columns[0];
+    return {
+      tooltip: { formatter: (p: any) => `${p.name}: ${axisFmt(p.value)}` },
+      series: [{ type: "treemap", roam: false, nodeClick: false, breadcrumb: { show: false },
+        label: { color: "#fff" }, itemStyle: { gapWidth: 2, borderColor: css("--surface", "#fff") },
+        data: rows.map((r, i) => ({ name: r[cat], value: r.valor,
+          itemStyle: { color: SEQUENTIAL[Math.max(0, SEQUENTIAL.length - 1 - i)] } })) }],
+    };
+  }
+
+  if (chart.type === "scatter") {
+    const xf = chart.encoding.x.field;
+    return {
+      grid: { left: 44, right: 16, top: 16, bottom: 30 },
+      tooltip: { trigger: "item", formatter: (p: any) => `${xf} ${p.value[0]}, ${axisFmt(p.value[1])}` },
+      xAxis: { type: "value", name: xf }, yAxis: { type: "value", axisLabel: { formatter: axisFmt } },
+      series: [{ type: "scatter", symbolSize: 9,
+        itemStyle: { color: CAT()[0], opacity: 0.75 },   // series ≤ 3 (tope all-pairs) aguas arriba
+        data: rows.map((r) => [r[xf], r.valor]) }],
+    };
+  }
+
+  if (chart.type === "histogram") {
+    const cat = chart.encoding.x.field;
+    return {
+      grid: { left: 40, right: 12, top: 12, bottom: 34 },
+      tooltip: { trigger: "item", valueFormatter: axisFmt },
+      xAxis: { type: "category", data: rows.map((r) => r[cat]) },
+      yAxis: { type: "value", axisLabel: { formatter: axisFmt } },
+      series: [{ type: "bar", barWidth: "96%",
+        data: rows.map((r) => r.valor),
+        itemStyle: { color: CAT()[0], borderColor: css("--surface", "#fff"), borderWidth: 1 } }],
+    };
+  }
+
+  if (chart.type === "funnel") {
+    const cat = chart.encoding.x?.field ?? result.columns[0];
+    return {
+      tooltip: { trigger: "item", formatter: (p: any) => `${p.name}: ${axisFmt(p.value)}` },
+      series: [{ type: "funnel", left: 8, right: 8, minSize: "24%",
+        label: { position: "inside", color: "#fff" }, labelLine: { show: false },
+        itemStyle: { borderColor: css("--surface", "#fff"), borderWidth: 2 },
+        data: rows.map((r, i) => ({ name: r[cat], value: r.valor,
+          itemStyle: { color: SEQUENTIAL[Math.min(SEQUENTIAL.length - 1, i + 2)] } })) }],
+    };
+  }
+
+  // fallback: tabla (también es la "vista tabla" de accesibilidad / relief)
   return { _table: true, columns: result.columns, rows };
 }

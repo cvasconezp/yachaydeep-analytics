@@ -50,8 +50,9 @@ npm --workspace example-vite-app run dev
 ```
 
 **Solo mirar:** abre cualquier archivo de `examples/standalone-html/`
-(`dashboard-demo`, `powerbi-demo`, `graph-demo`, `vosviewer-demo`) — traen ECharts
-incrustado y corren sin servidor.
+(`dashboard-demo`, `powerbi-demo`, `graph-demo`, `vosviewer-demo`, **`gallery-demo`**)
+— traen ECharts incrustado y corren sin servidor. `gallery-demo` muestra todo el
+catálogo de gráficos con la paleta validada, en claro y oscuro.
 
 ## Cómo lo consume una app (Core / Áncora / Kullki)
 
@@ -84,6 +85,7 @@ p.dashboard   # DashboardSpec inicial, listo para revisar y afinar
 
 - [`docs/DASHBOARD.md`](docs/DASHBOARD.md) — arquitectura del sistema (capas, contratos, resolver).
 - [`docs/DISTRIBUCION.md`](docs/DISTRIBUCION.md) — modelo de paquetes, consumo nativo y gobernanza.
+- [`docs/DESIGN-SYSTEM.md`](docs/DESIGN-SYSTEM.md) — tokens, paleta validada, catálogo de gráficos, estados y accesibilidad.
 
 ## Licencia
 

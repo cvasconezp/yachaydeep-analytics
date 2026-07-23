@@ -18,6 +18,12 @@ def resolve(spec: MetricSpec, query: MetricQuery, result: MetricResult) -> Chart
     if query.chart_hint:                      # override explícito del autor
         return _from_hint(spec, query, result)
 
+    # Formas especiales declaradas en el spec (no se infieren por nº de dimensiones):
+    # composición, distribución, correlación, embudo.
+    special = _special_shape(spec, query, result)
+    if special is not None:
+        return special
+
     shape = result.shape
     dims = query.dimensions
 
@@ -91,6 +97,64 @@ def resolve(spec: MetricSpec, query: MetricQuery, result: MetricResult) -> Chart
         type="table",
         encoding={c: Encoding(field=c, type="nominal") for c in result.columns},
     )
+
+
+_PIE_MAX = 4   # composición: pie/dona SOLO si ≤ 4 categorías; si no, barras apiladas
+
+
+def _special_shape(spec: MetricSpec, query: MetricQuery, result: MetricResult):
+    """Mapea las formas declaradas en el spec que no dependen del nº de dimensiones.
+    Devuelve None si el spec no es de forma especial (sigue la lógica normal)."""
+    s = spec.shape
+    dims = query.dimensions
+
+    if s == "part_to_whole":
+        d = dims[0] if dims else "categoria"
+        n = len(result.rows)
+        return ChartSpec(
+            type="pie" if n <= _PIE_MAX else "stacked_bar",
+            encoding={
+                "x": Encoding(field=d, type="nominal"),
+                "y": Encoding(field="valor", type="quantitative", format=spec.formato),
+            },
+            interactions=Interactions(emits_filter=d, tooltip=[d, "valor"]),
+        )
+
+    if s == "distribution":
+        d = dims[0] if dims else "bin"
+        return ChartSpec(
+            type="histogram",
+            encoding={
+                "x": Encoding(field=d, type="ordinal"),
+                "y": Encoding(field="valor", type="quantitative", format=spec.formato),
+            },
+            interactions=Interactions(tooltip=[d, "valor"]),
+        )
+
+    if s == "correlation":
+        # dos medidas: x = primera dimensión-medida, y = valor. Encoding explícito.
+        xf = dims[0] if dims else "x"
+        return ChartSpec(
+            type="scatter",
+            encoding={
+                "x": Encoding(field=xf, type="quantitative"),
+                "y": Encoding(field="valor", type="quantitative", format=spec.formato),
+            },
+            interactions=Interactions(tooltip=[xf, "valor"]),
+        )
+
+    if s == "funnel":
+        d = dims[0] if dims else "paso"
+        return ChartSpec(
+            type="funnel",
+            encoding={
+                "x": Encoding(field=d, type="ordinal"),
+                "y": Encoding(field="valor", type="quantitative", format=spec.formato),
+            },
+            interactions=Interactions(tooltip=[d, "valor"]),
+        )
+
+    return None
 
 
 def _drill_after(spec: MetricSpec, current: str) -> list[str]:

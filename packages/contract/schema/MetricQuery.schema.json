@@ -92,7 +92,10 @@
             "scatter",
             "heatmap",
             "funnel",
-            "table"
+            "table",
+            "pie",
+            "histogram",
+            "boxplot"
           ],
           "type": "string"
         },
