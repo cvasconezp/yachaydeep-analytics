@@ -49,11 +49,12 @@ npm install && npm run build          # compila contract + dashboard
 npm --workspace example-vite-app run dev
 ```
 
-**Solo mirar:** abre cualquier archivo de `examples/standalone-html/`
-(`dashboard-demo`, `powerbi-demo`, `graph-demo`, `vosviewer-demo`, `gallery-demo`,
-`ask-demo`, **`ingest-demo`**) — traen ECharts incrustado y corren sin servidor.
-`gallery-demo` muestra todo el catálogo; `ask-demo` es el buscador «pregúntale a tus
-datos»; `ingest-demo` es el asistente de subida/limpieza de Excel/CSV.
+**Solo mirar:** abre cualquier archivo de `examples/standalone-html/` — traen ECharts
+incrustado y corren sin servidor:
+`dashboard-demo`, `powerbi-demo` (cross-highlighting), `graph-demo`, `vosviewer-demo`,
+`gallery-demo` (catálogo completo), `ask-demo` («pregúntale a tus datos»),
+`ingest-demo` (subir/limpiar Excel), **`model-editor-demo`** (editor visual de
+relaciones, tipo Power Pivot) y **`builder-demo`** (constructor de tablero sin código).
 
 ## Cómo lo consume una app (Core / Áncora / Kullki)
 
@@ -125,6 +126,9 @@ Ver [`docs/VS-POWERBI.md`](docs/VS-POWERBI.md).
 - [`docs/DASHBOARD.md`](docs/DASHBOARD.md) — arquitectura del sistema (capas, contratos, resolver).
 - [`docs/DISTRIBUCION.md`](docs/DISTRIBUCION.md) — modelo de paquetes, consumo nativo y gobernanza.
 - [`docs/DESIGN-SYSTEM.md`](docs/DESIGN-SYSTEM.md) — tokens, paleta validada, catálogo de gráficos, estados y accesibilidad.
+- [`docs/VS-POWERBI.md`](docs/VS-POWERBI.md) — cómo igualar y superar a Power BI (mapa de features y hoja de ruta).
+- [`docs/SEGURIDAD-DATOS.md`](docs/SEGURIDAD-DATOS.md) — analítica sobre datos cifrados (índice ciego, k-anon).
+- [`docs/ESCALA.md`](docs/ESCALA.md) — big data: pushdown y motores columnares (DuckDB/ClickHouse/BigQuery).
 
 ## Licencia
 

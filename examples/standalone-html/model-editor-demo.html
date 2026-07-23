@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>yd-analytics · Editor de modelo (relaciones)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700;800&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{--brand:#1B3A6B;--accent:#E8A838;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--bg:#f4f5f2;--surface:#fcfcfb;--border:#d7dae0;--line:#2a78d6}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Instrument Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1160px;margin:0 auto;padding:24px 18px 60px}
+  .eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.25em;color:var(--accent);font-weight:700}
+  h1{font-size:24px;font-weight:800;margin:.15em 0 .1em}
+  .sub{color:var(--ink2);font-size:14px;max-width:740px}
+  .bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:14px 0 8px}
+  button{border:0;background:var(--brand);color:#fff;font:inherit;font-weight:600;padding:8px 14px;border-radius:9px;cursor:pointer}
+  button.ghost{background:#fff;color:var(--ink2);border:1px solid var(--border)}
+  .hint{font-size:12px;color:var(--muted)}
+  .stage{display:grid;grid-template-columns:1fr 280px;gap:12px}
+  @media(max-width:860px){.stage{grid-template-columns:1fr}}
+  .canvas{position:relative;height:560px;background:
+     radial-gradient(circle, #e7e9ed 1px, transparent 1px) 0 0/22px 22px, var(--surface);
+     border:1px solid var(--border);border-radius:14px;overflow:hidden}
+  svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+  .tbl{position:absolute;width:190px;background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:0 3px 10px rgba(16,36,68,.08);user-select:none}
+  .tbl.fact{border-color:var(--brand);box-shadow:0 0 0 2px color-mix(in srgb,var(--brand) 30%,#fff)}
+  .th{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:7px 10px;background:var(--brand);color:#fff;border-radius:9px 9px 0 0;cursor:grab;font-weight:700;font-size:13px}
+  .tbl.fact .th{background:linear-gradient(90deg,var(--brand),#2b5aa0)}
+  .th .star{cursor:pointer;font-size:12px;opacity:.85}
+  .col{display:flex;align-items:center;gap:6px;padding:5px 10px;font-size:12.5px;border-top:1px solid #eef1f5;cursor:pointer}
+  .col:hover{background:#f3f7fd}
+  .col.key{color:var(--brand);font-weight:600}
+  .col.sel{background:color-mix(in srgb,var(--accent) 22%,#fff)}
+  .col .dot{width:7px;height:7px;border-radius:50%;background:#cbd3df}
+  .col.key .dot{background:var(--accent)}
+  .side{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px}
+  .side h3{margin:0 0 8px;font-size:13px}
+  .rel{display:flex;align-items:center;justify-content:space-between;font-family:"Spline Sans Mono";font-size:11.5px;color:var(--ink2);padding:6px 0;border-bottom:1px dashed var(--border)}
+  .rel button{background:transparent;color:var(--muted);border:0;cursor:pointer;font-size:14px;padding:0}
+  pre{background:#0f1830;color:#cfe0f7;border-radius:12px;padding:12px;overflow:auto;font-family:"Spline Sans Mono";font-size:11.5px;max-height:200px;margin-top:12px}
+  .note{font-size:12px;color:var(--muted);border-top:1px solid var(--border);margin-top:16px;padding-top:12px;line-height:1.6}
+  code{font-family:"Spline Sans Mono";font-size:12px;background:#eef1f5;padding:1px 5px;border-radius:5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">yd-analytics · editor de modelo</div>
+  <h1>Modelo de relaciones — como Power Pivot, pero automático</h1>
+  <p class="sub">El sistema <b>detecta solo</b> cómo se unen tus tablas (claves foráneas). Aquí las ves,
+  las confirmas o ajustas, marcas la tabla de <b>hechos</b> (★) y exportas el <b>modelo</b> que permite
+  preguntar cruzando tablas sin DAX. Arrastra las tablas; clic en una columna y luego en otra para crear
+  una relación; ✕ para quitarla.</p>
+
+  <div class="bar">
+    <button id="detect">Detectar relaciones</button>
+    <button class="ghost" id="clear">Limpiar relaciones</button>
+    <button class="ghost" id="exp">Exportar modelo</button>
+    <span class="hint" id="sel">Clic en una columna para empezar una relación…</span>
+  </div>
+
+  <div class="stage">
+    <div class="canvas" id="canvas"><svg id="svg"></svg></div>
+    <div class="side">
+      <h3>Relaciones (<span id="nrel">0</span>)</h3>
+      <div id="rels"></div>
+      <pre id="json" hidden></pre>
+    </div>
+  </div>
+
+  <div class="note"><strong>Cómo encaja.</strong> Esto es la cara del motor <code>model</code> del
+  backend: <code>detect_relationships</code> propone, tú confirmas, y <code>query_related</code> arma los
+  JOIN al preguntar. La tabla de hechos y las dimensiones definen el «esquema en estrella» del tablero.</div>
+</div>
+
+<script>
+const TABLES=[
+  {name:'estudiantes',fact:true,x:430,y:230,cols:['id','nombre','carrera_id','jornada_id','periodo_id']},
+  {name:'carreras',fact:false,x:120,y:60,cols:['id','nombre']},
+  {name:'jornadas',fact:false,x:120,y:330,cols:['id','nombre']},
+  {name:'periodos',fact:false,x:800,y:120,cols:['id','nombre']},
+];
+const isKey=c=>c==='id'||/_id$/.test(c)||c==='codigo';
+let rels=[]; let sel=null;
+const canvas=document.getElementById('canvas'), svg=document.getElementById('svg');
+
+function sing(x){x=x.toLowerCase();return x.endsWith('es')?x.slice(0,-2):(x.endsWith('s')?x.slice(0,-1):x);}
+function detect(){
+  rels=[];
+  for(const t of TABLES) for(const c of t.cols){
+    const m=c.match(/^(.*)_(id|codigo)$/); if(!m)continue;
+    const stem=sing(m[1]);
+    const target=TABLES.find(b=>b!==t&&(sing(b.name)===stem||sing(b.name).startsWith(stem)));
+    if(target&&target.cols.includes('id')) addRel(t.name,c,target.name,'id',false);
+  }
+  refresh();
+}
+function addRel(ft,fc,tt,tc){ if(rels.some(r=>r.ft===ft&&r.fc===fc&&r.tt===tt&&r.tc===tc))return;
+  rels.push({ft,fc,tt,tc,card:'many_to_one'}); }
+function colId(t,c){return `c__${t}__${c}`;}
+
+function buildTables(){
+  TABLES.forEach(t=>{
+    const d=document.createElement('div'); d.className='tbl'+(t.fact?' fact':''); d.style.left=t.x+'px'; d.style.top=t.y+'px'; d.dataset.t=t.name;
+    d.innerHTML=`<div class="th" data-drag="${t.name}">${t.name}<span class="star" title="Marcar como hechos">${t.fact?'★ hechos':'☆'}</span></div>`+
+      t.cols.map(c=>`<div class="col ${isKey(c)?'key':''}" id="${colId(t.name,c)}" data-t="${t.name}" data-c="${c}"><span class="dot"></span>${c}</div>`).join('');
+    canvas.appendChild(d);
+  });
+  canvas.querySelectorAll('.col').forEach(el=>el.onclick=()=>onColClick(el.dataset.t,el.dataset.c));
+  canvas.querySelectorAll('.star').forEach(s=>s.onclick=e=>{e.stopPropagation();const t=TABLES.find(x=>x.name===e.target.closest('.tbl').dataset.t);t.fact=!t.fact;e.target.closest('.tbl').classList.toggle('fact',t.fact);e.target.textContent=t.fact?'★ hechos':'☆';});
+  canvas.querySelectorAll('.th').forEach(h=>h.addEventListener('mousedown',startDrag));
+}
+function onColClick(t,c){
+  if(!sel){sel={t,c};mark();document.getElementById('sel').textContent=`Origen: ${t}.${c} — ahora clic en la columna destino`;return;}
+  if(sel.t!==t){addRel(sel.t,sel.c,t,c);refresh();}
+  sel=null;mark();document.getElementById('sel').textContent='Clic en una columna para empezar una relación…';
+}
+function mark(){canvas.querySelectorAll('.col').forEach(el=>el.classList.remove('sel'));if(sel)document.getElementById(colId(sel.t,sel.c)).classList.add('sel');}
+
+function center(el){const r=el.getBoundingClientRect(),cc=canvas.getBoundingClientRect();
+  return {x:r.left-cc.left,xr:r.right-cc.left,y:r.top-cc.top+r.height/2,w:r.width};}
+function drawLines(){
+  svg.innerHTML='';
+  rels.forEach(r=>{
+    const a=document.getElementById(colId(r.ft,r.fc)), b=document.getElementById(colId(r.tt,r.tc));
+    if(!a||!b)return; const ca=center(a),cb=center(b);
+    const ax=ca.x+ca.w/2<cb.x? ca.xr:ca.x, bx=cb.x+cb.w/2>ca.x? cb.x:cb.xr;
+    const mx=(ax+bx)/2;
+    const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('d',`M ${ax} ${ca.y} C ${mx} ${ca.y}, ${mx} ${cb.y}, ${bx} ${cb.y}`);
+    path.setAttribute('fill','none');path.setAttribute('stroke','var(--line)');path.setAttribute('stroke-width','2');path.setAttribute('opacity','.7');
+    svg.appendChild(path);
+    // marcador "uno" (círculo) en el destino
+    const cir=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    cir.setAttribute('cx',bx);cir.setAttribute('cy',cb.y);cir.setAttribute('r','4');cir.setAttribute('fill','var(--accent)');
+    svg.appendChild(cir);
+  });
+}
+function refresh(){
+  const box=document.getElementById('rels'); document.getElementById('nrel').textContent=rels.length;
+  box.innerHTML=rels.map((r,i)=>`<div class="rel"><span>${r.ft}.${r.fc} → ${r.tt}.${r.tc}</span><button data-i="${i}">✕</button></div>`).join('')||'<span class="hint">Sin relaciones. Pulsa «Detectar».</span>';
+  box.querySelectorAll('button').forEach(b=>b.onclick=()=>{rels.splice(+b.dataset.i,1);refresh();});
+  drawLines();
+}
+function exportModel(){
+  const model={tables:TABLES.map(t=>({name:t.name,role:t.fact?'fact':'dimension',columns:t.cols})),
+    relationships:rels.map(r=>({from_table:r.ft,from_col:r.fc,to_table:r.tt,to_col:r.tc,cardinality:r.card}))};
+  const el=document.getElementById('json');el.hidden=false;el.textContent=JSON.stringify(model,null,2);
+}
+// drag
+let drag=null;
+function startDrag(e){const d=e.target.closest('.tbl');drag={d,ox:e.clientX-d.offsetLeft,oy:e.clientY-d.offsetTop};e.target.style.cursor='grabbing';}
+window.addEventListener('mousemove',e=>{if(!drag)return;drag.d.style.left=Math.max(0,e.clientX-drag.ox)+'px';drag.d.style.top=Math.max(0,e.clientY-drag.oy)+'px';drawLines();});
+window.addEventListener('mouseup',()=>{if(drag){drag.d.querySelector('.th').style.cursor='grab';drag=null;}});
+window.addEventListener('resize',drawLines);
+
+document.getElementById('detect').onclick=detect;
+document.getElementById('clear').onclick=()=>{rels=[];refresh();};
+document.getElementById('exp').onclick=exportModel;
+buildTables(); detect();
+</script>
+</body>
+</html>

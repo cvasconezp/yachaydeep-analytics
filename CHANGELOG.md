@@ -42,3 +42,7 @@ versionado SemVer. El contrato manda: un cambio incompatible es *major*.
   JOIN solo — **sin DAX ni Power Pivot**. Con tests.
 - Demos: `ingest-demo.html` (asistente visual de subida/limpieza) y cableado de
   `ask-demo` al backend (`/analytics/assist`). Doc `VS-POWERBI.md`.
+- **Editor visual de relaciones** (`model-editor-demo.html`) y **constructor de tablero
+  sin código** (`builder-demo.html`) — las dos piezas para usuarios no técnicos.
+- **Big data**: prueba del motor contra **DuckDB** (columnar) con cientos de miles de
+  filas por pushdown (`tests/test_bigdata.py`, extra `[bigdata]`). Doc `ESCALA.md`.
