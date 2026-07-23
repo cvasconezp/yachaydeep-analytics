@@ -1,0 +1,100 @@
+{
+  "description": "Métrica de relación: dos consultas whitelisted (nodos y aristas).",
+  "properties": {
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "clase": {
+      "default": "dominio",
+      "enum": [
+        "uso",
+        "dominio",
+        "impacto"
+      ],
+      "title": "Clase",
+      "type": "string"
+    },
+    "titulo": {
+      "title": "Titulo",
+      "type": "string"
+    },
+    "descripcion": {
+      "default": "",
+      "title": "Descripcion",
+      "type": "string"
+    },
+    "directed": {
+      "default": true,
+      "title": "Directed",
+      "type": "boolean"
+    },
+    "nodes_from": {
+      "title": "Nodes From",
+      "type": "string"
+    },
+    "node_id": {
+      "title": "Node Id",
+      "type": "string"
+    },
+    "node_label": {
+      "title": "Node Label",
+      "type": "string"
+    },
+    "node_group": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Node Group"
+    },
+    "edges_from": {
+      "title": "Edges From",
+      "type": "string"
+    },
+    "edge_source": {
+      "title": "Edge Source",
+      "type": "string"
+    },
+    "edge_target": {
+      "title": "Edge Target",
+      "type": "string"
+    },
+    "filterable": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Filterable",
+      "type": "array"
+    },
+    "roles": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Roles",
+      "type": "array"
+    },
+    "version": {
+      "default": "v1",
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "titulo",
+    "nodes_from",
+    "node_id",
+    "node_label",
+    "edges_from",
+    "edge_source",
+    "edge_target"
+  ],
+  "title": "GraphSpec",
+  "type": "object"
+}

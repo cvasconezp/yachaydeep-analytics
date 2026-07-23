@@ -1,0 +1,148 @@
+{
+  "$defs": {
+    "Measure": {
+      "description": "Expresión SQL de agregación. Es la ÚNICA parte con SQL libre; se define\nen el registro de casa, nunca llega desde el cliente.",
+      "properties": {
+        "sql": {
+          "title": "Sql",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sql"
+      ],
+      "title": "Measure",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "clase": {
+      "enum": [
+        "uso",
+        "dominio",
+        "impacto"
+      ],
+      "title": "Clase",
+      "type": "string"
+    },
+    "titulo": {
+      "title": "Titulo",
+      "type": "string"
+    },
+    "descripcion": {
+      "default": "",
+      "title": "Descripcion",
+      "type": "string"
+    },
+    "shape": {
+      "enum": [
+        "scalar",
+        "timeseries",
+        "category",
+        "category_wide",
+        "part_to_whole",
+        "timeseries_multi",
+        "distribution",
+        "correlation",
+        "matrix",
+        "funnel",
+        "table"
+      ],
+      "title": "Shape",
+      "type": "string"
+    },
+    "unidad": {
+      "default": "conteo",
+      "title": "Unidad",
+      "type": "string"
+    },
+    "formato": {
+      "default": "number",
+      "enum": [
+        "number",
+        "money",
+        "percent",
+        "impact"
+      ],
+      "title": "Formato",
+      "type": "string"
+    },
+    "fuente": {
+      "title": "Fuente",
+      "type": "string"
+    },
+    "medida": {
+      "$ref": "#/$defs/Measure"
+    },
+    "grano": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Grano",
+      "type": "array"
+    },
+    "dim_temporal": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Dim Temporal"
+    },
+    "cadencia": {
+      "default": "on-read",
+      "enum": [
+        "on-read",
+        "hourly",
+        "daily"
+      ],
+      "title": "Cadencia",
+      "type": "string"
+    },
+    "modelo": {
+      "anyOf": [
+        {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Modelo"
+    },
+    "roles": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Roles",
+      "type": "array"
+    },
+    "version": {
+      "default": "v1",
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "clase",
+    "titulo",
+    "shape",
+    "fuente",
+    "medida"
+  ],
+  "title": "MetricSpec",
+  "type": "object"
+}

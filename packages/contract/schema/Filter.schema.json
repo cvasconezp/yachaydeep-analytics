@@ -1,0 +1,29 @@
+{
+  "properties": {
+    "field": {
+      "title": "Field",
+      "type": "string"
+    },
+    "op": {
+      "default": "eq",
+      "enum": [
+        "eq",
+        "in",
+        "gte",
+        "lte",
+        "between"
+      ],
+      "title": "Op",
+      "type": "string"
+    },
+    "value": {
+      "title": "Value"
+    }
+  },
+  "required": [
+    "field",
+    "value"
+  ],
+  "title": "Filter",
+  "type": "object"
+}

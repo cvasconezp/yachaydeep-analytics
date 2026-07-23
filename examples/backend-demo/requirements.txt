@@ -1,0 +1,6 @@
+# Instala el paquete del monorepo + FastAPI para el ejemplo:
+#   pip install -e ../../packages/py[api]
+# o desde el registro cuando esté publicado:
+#   pip install "yd-analytics[api]" uvicorn
+yd-analytics[api]
+uvicorn[standard]>=0.30

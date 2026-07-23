@@ -1,0 +1,116 @@
+{
+  "$defs": {
+    "GraphEdge": {
+      "properties": {
+        "source": {
+          "title": "Source",
+          "type": "string"
+        },
+        "target": {
+          "title": "Target",
+          "type": "string"
+        },
+        "weight": {
+          "default": 1.0,
+          "title": "Weight",
+          "type": "number"
+        },
+        "kind": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Kind"
+        }
+      },
+      "required": [
+        "source",
+        "target"
+      ],
+      "title": "GraphEdge",
+      "type": "object"
+    },
+    "GraphNode": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "group": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Group"
+        },
+        "value": {
+          "default": 1.0,
+          "title": "Value",
+          "type": "number"
+        },
+        "attrs": {
+          "additionalProperties": true,
+          "title": "Attrs",
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "label"
+      ],
+      "title": "GraphNode",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "graph": {
+      "title": "Graph",
+      "type": "string"
+    },
+    "directed": {
+      "default": true,
+      "title": "Directed",
+      "type": "boolean"
+    },
+    "nodes": {
+      "items": {
+        "$ref": "#/$defs/GraphNode"
+      },
+      "title": "Nodes",
+      "type": "array"
+    },
+    "edges": {
+      "items": {
+        "$ref": "#/$defs/GraphEdge"
+      },
+      "title": "Edges",
+      "type": "array"
+    },
+    "meta": {
+      "additionalProperties": true,
+      "title": "Meta",
+      "type": "object"
+    }
+  },
+  "required": [
+    "graph",
+    "nodes",
+    "edges"
+  ],
+  "title": "GraphResult",
+  "type": "object"
+}

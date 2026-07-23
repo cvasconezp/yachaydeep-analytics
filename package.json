@@ -1,0 +1,17 @@
+{
+  "name": "yachaydeep-analytics",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sistema de representación gráfica de la casa: contrato + cerebro (Python) + cara (React).",
+  "license": "MIT",
+  "workspaces": [
+    "packages/contract",
+    "packages/dashboard",
+    "examples/vite-app"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace @yachaydeep/analytics-contract && npm run build --workspace @yachaydeep/dashboard",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "schema": "python scripts/gen_schema.py"
+  }
+}

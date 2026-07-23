@@ -1,0 +1,253 @@
+{
+  "$defs": {
+    "ChartSpec": {
+      "properties": {
+        "type": {
+          "enum": [
+            "kpi",
+            "line",
+            "area",
+            "bar",
+            "bar_h",
+            "stacked_bar",
+            "treemap",
+            "scatter",
+            "heatmap",
+            "funnel",
+            "table"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "encoding": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Encoding"
+          },
+          "title": "Encoding",
+          "type": "object"
+        },
+        "interactions": {
+          "$ref": "#/$defs/Interactions"
+        },
+        "series_role": {
+          "default": "primary",
+          "enum": [
+            "primary",
+            "accent",
+            "neutral"
+          ],
+          "title": "Series Role",
+          "type": "string"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "ChartSpec",
+      "type": "object"
+    },
+    "Encoding": {
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "nominal",
+            "ordinal",
+            "quantitative",
+            "temporal"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "format": {
+          "anyOf": [
+            {
+              "enum": [
+                "number",
+                "money",
+                "percent",
+                "impact"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Format"
+        }
+      },
+      "required": [
+        "field",
+        "type"
+      ],
+      "title": "Encoding",
+      "type": "object"
+    },
+    "Interactions": {
+      "properties": {
+        "emits_filter": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Emits Filter"
+        },
+        "drilldown": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Drilldown",
+          "type": "array"
+        },
+        "tooltip": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tooltip",
+          "type": "array"
+        }
+      },
+      "title": "Interactions",
+      "type": "object"
+    },
+    "MetricResult": {
+      "properties": {
+        "metric": {
+          "title": "Metric",
+          "type": "string"
+        },
+        "shape": {
+          "enum": [
+            "scalar",
+            "timeseries",
+            "category",
+            "category_wide",
+            "part_to_whole",
+            "timeseries_multi",
+            "distribution",
+            "correlation",
+            "matrix",
+            "funnel",
+            "table"
+          ],
+          "title": "Shape",
+          "type": "string"
+        },
+        "unidad": {
+          "title": "Unidad",
+          "type": "string"
+        },
+        "formato": {
+          "enum": [
+            "number",
+            "money",
+            "percent",
+            "impact"
+          ],
+          "title": "Formato",
+          "type": "string"
+        },
+        "columns": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Columns",
+          "type": "array"
+        },
+        "rows": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Rows",
+          "type": "array"
+        },
+        "meta": {
+          "additionalProperties": true,
+          "title": "Meta",
+          "type": "object"
+        },
+        "truncated": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Truncation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "metric",
+        "shape",
+        "unidad",
+        "formato",
+        "columns",
+        "rows"
+      ],
+      "title": "MetricResult",
+      "type": "object"
+    },
+    "Truncation": {
+      "properties": {
+        "shown": {
+          "title": "Shown",
+          "type": "integer"
+        },
+        "total": {
+          "title": "Total",
+          "type": "integer"
+        },
+        "grouped_as": {
+          "default": "Otros",
+          "title": "Grouped As",
+          "type": "string"
+        }
+      },
+      "required": [
+        "shown",
+        "total"
+      ],
+      "title": "Truncation",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "result": {
+      "$ref": "#/$defs/MetricResult"
+    },
+    "chart": {
+      "$ref": "#/$defs/ChartSpec"
+    }
+  },
+  "required": [
+    "result",
+    "chart"
+  ],
+  "title": "PanelResponse",
+  "type": "object"
+}

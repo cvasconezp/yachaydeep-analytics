@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ejemplo · @yachaydeep/dashboard</title>
+  <style>
+    /* Tokens de marca del PRODUCTO consumidor (aquí: verde tipo Kullki).
+       El mismo dashboard se ve distinto según los tokens de cada app. */
+    :root{ --brand-primary:#2E7D6B; --brand-accent:#E8A838; --ink:#11182a; }
+    body{ font-family: system-ui, sans-serif; margin:0; background:#f2f4f8; }
+    .yd-grid{ display:grid; grid-template-columns:repeat(12,1fr); gap:12px; padding:16px; }
+    .yd-cell{ background:#fff; border:1px solid #e3e8ef; border-radius:12px; padding:12px; }
+    .yd-cell--sm{ grid-column:span 3 } .yd-cell--md{ grid-column:span 6 } .yd-cell--lg{ grid-column:span 8 }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+</html>

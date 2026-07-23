@@ -1,0 +1,12 @@
+{
+  "MetricSpec": "schema/MetricSpec.schema.json",
+  "MetricQuery": "schema/MetricQuery.schema.json",
+  "MetricResult": "schema/MetricResult.schema.json",
+  "ChartSpec": "schema/ChartSpec.schema.json",
+  "PanelResponse": "schema/PanelResponse.schema.json",
+  "Filter": "schema/Filter.schema.json",
+  "GraphSpec": "schema/GraphSpec.schema.json",
+  "GraphNode": "schema/GraphNode.schema.json",
+  "GraphEdge": "schema/GraphEdge.schema.json",
+  "GraphResult": "schema/GraphResult.schema.json"
+}

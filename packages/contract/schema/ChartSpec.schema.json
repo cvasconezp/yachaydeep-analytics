@@ -1,0 +1,134 @@
+{
+  "$defs": {
+    "Encoding": {
+      "properties": {
+        "field": {
+          "title": "Field",
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "nominal",
+            "ordinal",
+            "quantitative",
+            "temporal"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "format": {
+          "anyOf": [
+            {
+              "enum": [
+                "number",
+                "money",
+                "percent",
+                "impact"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Format"
+        }
+      },
+      "required": [
+        "field",
+        "type"
+      ],
+      "title": "Encoding",
+      "type": "object"
+    },
+    "Interactions": {
+      "properties": {
+        "emits_filter": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Emits Filter"
+        },
+        "drilldown": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Drilldown",
+          "type": "array"
+        },
+        "tooltip": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tooltip",
+          "type": "array"
+        }
+      },
+      "title": "Interactions",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "type": {
+      "enum": [
+        "kpi",
+        "line",
+        "area",
+        "bar",
+        "bar_h",
+        "stacked_bar",
+        "treemap",
+        "scatter",
+        "heatmap",
+        "funnel",
+        "table"
+      ],
+      "title": "Type",
+      "type": "string"
+    },
+    "encoding": {
+      "additionalProperties": {
+        "$ref": "#/$defs/Encoding"
+      },
+      "title": "Encoding",
+      "type": "object"
+    },
+    "interactions": {
+      "$ref": "#/$defs/Interactions"
+    },
+    "series_role": {
+      "default": "primary",
+      "enum": [
+        "primary",
+        "accent",
+        "neutral"
+      ],
+      "title": "Series Role",
+      "type": "string"
+    },
+    "note": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Note"
+    }
+  },
+  "required": [
+    "type"
+  ],
+  "title": "ChartSpec",
+  "type": "object"
+}
