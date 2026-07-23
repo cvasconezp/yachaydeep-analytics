@@ -23,6 +23,7 @@ from .assist import Suggestion, interpret, openai_compatible_llm
 from .engine import run
 from .export import to_csv
 from .graph import run_graph
+from .model import Model, Relationship, build_model, detect_relationships, query_related
 from .profiler import ProfiledColumn, ProfileResult, profile
 from .schemas import (
     ChartSpec, Filter, GraphEdge, GraphNode, GraphResult, GraphSpec,
@@ -34,6 +35,7 @@ __version__ = "0.1.0"
 __all__ = [
     "run_query", "run_graph", "profile", "interpret", "openai_compatible_llm",
     "ingest", "to_csv", "make_router",
+    "detect_relationships", "build_model", "query_related", "Model", "Relationship",
     "registry", "resolver", "graph",
     "MetricQuery", "MetricResult", "MetricSpec", "ChartSpec", "Filter",
     "GraphSpec", "GraphNode", "GraphEdge", "GraphResult", "PanelResponse",

@@ -37,3 +37,8 @@ versionado SemVer. El contrato manda: un cambio incompatible es *major*.
 - **Buscador de lenguaje natural**: endpoint `POST /analytics/assist` (usa `assist_llm`
   como Cerebras/Kimi o reglas offline) y demo `ask-demo.html`.
 - `MetricSpec.param_defaults` (valores por defecto de la medida, p. ej. `umbral`).
+- **Modelo semántico automático** (`model`): detecta relaciones entre tablas (claves
+  foráneas por nombre/unicidad) y `query_related` consulta cruzando tablas armando los
+  JOIN solo — **sin DAX ni Power Pivot**. Con tests.
+- Demos: `ingest-demo.html` (asistente visual de subida/limpieza) y cableado de
+  `ask-demo` al backend (`/analytics/assist`). Doc `VS-POWERBI.md`.

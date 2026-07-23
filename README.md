@@ -50,10 +50,10 @@ npm --workspace example-vite-app run dev
 ```
 
 **Solo mirar:** abre cualquier archivo de `examples/standalone-html/`
-(`dashboard-demo`, `powerbi-demo`, `graph-demo`, `vosviewer-demo`, **`gallery-demo`**,
-**`ask-demo`**) — traen ECharts incrustado y corren sin servidor. `gallery-demo`
-muestra todo el catálogo con la paleta validada en claro/oscuro; `ask-demo` es el
-buscador «pregúntale a tus datos».
+(`dashboard-demo`, `powerbi-demo`, `graph-demo`, `vosviewer-demo`, `gallery-demo`,
+`ask-demo`, **`ingest-demo`**) — traen ECharts incrustado y corren sin servidor.
+`gallery-demo` muestra todo el catálogo; `ask-demo` es el buscador «pregúntale a tus
+datos»; `ingest-demo` es el asistente de subida/limpieza de Excel/CSV.
 
 ## Cómo lo consume una app (Core / Áncora / Kullki)
 
@@ -104,6 +104,21 @@ sug = interpret("¿riesgo por carrera?", llm=llm)   # → MetricQuery + gráfico
 ```
 
 Endpoint listo: `POST /analytics/assist {"question": "..."}`. Sin LLM usa reglas offline.
+En la app real: `make_router(get_engine=..., assist_llm=openai_compatible_llm(...))`.
+
+## Relaciones entre tablas, sin DAX ni Power Pivot
+
+```python
+from yd_analytics import build_model, query_related
+model = build_model(engine, ["estudiantes", "carreras", "jornadas"])
+model.relationships          # detectadas solas: estudiantes.carrera_id → carreras.id …
+# consulta cruzando tablas — el JOIN lo arma el modelo, no tú:
+rows = query_related(engine, model, fact="estudiantes", measure="COUNT(*)",
+                     dimension="nombre", dim_table="carreras")
+```
+
+Sube o conecta una base → el sistema descubre cómo se unen las tablas → preguntas.
+Ver [`docs/VS-POWERBI.md`](docs/VS-POWERBI.md).
 
 ## Documentación
 
