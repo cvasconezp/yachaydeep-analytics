@@ -33,7 +33,8 @@ def _effective_shape(spec, query: MetricQuery) -> Shape:
     return "table"
 
 
-def run(engine: Engine, query: MetricQuery, *, role: str = "*") -> MetricResult:
+def run(engine: Engine, query: MetricQuery, *, role: str = "*",
+        decrypt_labels=None) -> MetricResult:
     spec = registry.get(query.metric)
 
     # Autorización por métrica (§5). role='*' = contexto interno/superusuario (bypass).
@@ -60,13 +61,29 @@ def run(engine: Engine, query: MetricQuery, *, role: str = "*") -> MetricResult:
         was_cached = False
 
     columns = ([*query.dimensions, "valor"]) if query.dimensions else ["valor"]
+    out_rows = rows if query.dimensions else _scalar_rows(rows)
+
+    # Privacidad: supresión k-anónima (LOPDP). Solo métricas de conteo con desglose.
+    suppressed = 0
+    if spec.k_anon > 0 and query.dimensions and spec.unidad == "conteo":
+        kept = [r for r in out_rows if (r.get("valor") or 0) >= spec.k_anon]
+        suppressed = len(out_rows) - len(kept)
+        out_rows = kept
+
+    # Privacidad: traducir etiquetas de índice ciego (hash → texto) vía hook de la app.
+    if decrypt_labels and query.dimensions:
+        for d in query.dimensions:
+            if d in spec.blind_index:
+                mapping = decrypt_labels(d, [r[d] for r in out_rows])
+                for r in out_rows:
+                    r[d] = mapping.get(r[d], r[d])
 
     # Truncamiento honesto (§2.1): si pusimos LIMIT, reportamos cuántos había.
     truncated = None
     if query.limit and query.dimensions:
         total = _count_groups(engine, query)
         if total > len(rows):
-            truncated = Truncation(shown=len(rows), total=total)
+            truncated = Truncation(shown=len(out_rows), total=total)
 
     return MetricResult(
         metric=spec.id,
@@ -74,12 +91,13 @@ def run(engine: Engine, query: MetricQuery, *, role: str = "*") -> MetricResult:
         unidad=spec.unidad,
         formato=spec.formato,
         columns=columns,
-        rows=rows if query.dimensions else _scalar_rows(rows),
+        rows=out_rows,
         meta={
             "version": spec.version,
             "modelo": f"{spec.modelo['nombre']}@{spec.modelo['version']}" if spec.modelo else None,
             "clase": spec.clase,
             "cached": was_cached,
+            "k_anon_suprimidas": suppressed,
             "sql": sql,   # útil en el demo; en producción se omite o va detrás de flag debug
         },
         truncated=truncated,

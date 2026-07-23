@@ -31,6 +31,10 @@ export interface MetricSpec {
   cadencia?: "on-read" | "hourly" | "daily";
   modelo?: Record<string, string> | null;
   roles?: string[];
+  /** Para una dimensión cifrada: su columna de índice ciego (blind index). */
+  blind_index?: Record<string, string>;
+  /** Supresión k-anónima: oculta conteos < k (LOPDP). 0 = desactivado. */
+  k_anon?: number;
   version?: string;
 }
 

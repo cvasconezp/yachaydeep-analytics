@@ -22,3 +22,13 @@ versionado SemVer. El contrato manda: un cambio incompatible es *major*.
   (incluye `gallery-demo` con todo el catálogo en claro/oscuro).
 - Docs: `DASHBOARD.md` (arquitectura), `DISTRIBUCION.md` (paquetes y consumo) y
   `DESIGN-SYSTEM.md` (tokens, paleta validada, catálogo, estados, accesibilidad).
+- **Capa de asistencia** (`interpret`): pregunta en lenguaje natural → MetricQuery +
+  gráfico, con fallback por reglas offline y adaptador `openai_compatible_llm`
+  (Cerebras, Kimi/Moonshot, OpenAI — solo cambia base_url/model).
+- **Seguridad de datos cifrados**: índice ciego en `MetricSpec`/SQL, supresión
+  k-anónima, hook `decrypt_labels` (el paquete nunca tiene las llaves) y detección de
+  columnas cifradas en el profiler. Doc `SEGURIDAD-DATOS.md`.
+- **Exportación**: `to_csv` (Python) y `exportCSV`/`exportPNG` (frontend).
+- **Mapa coroplético de Ecuador** (`ChoroplethView` + GeoJSON de provincias) y el
+  clúster VOSviewer, ambos integrados en `gallery-demo`.
+- `registry.register()` para que las apps añadan sus métricas.

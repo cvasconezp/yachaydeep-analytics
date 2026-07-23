@@ -57,6 +57,13 @@ class MetricSpec(BaseModel):
     cadencia: Literal["on-read", "hourly", "daily"] = "on-read"
     modelo: dict[str, str] | None = None
     roles: list[str] = Field(default_factory=lambda: ["*"])
+    # --- Privacidad / cifrado (ver docs de seguridad) --- #
+    # Para una dimensión cifrada, la columna del índice ciego (blind index) que
+    # permite agrupar/igualar sin exponer el texto plano. { "cedula": "cedula_bidx" }.
+    blind_index: dict[str, str] = Field(default_factory=dict)
+    # Supresión k-anónima: si > 0 y la métrica es de conteo, se ocultan las celdas
+    # con conteo < k (LOPDP: evita re-identificar grupos diminutos).
+    k_anon: int = 0
     version: str = "v1"
 
 

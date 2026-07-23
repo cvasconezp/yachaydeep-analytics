@@ -47,9 +47,15 @@ class ProfileResult:
     dashboard: dict
 
 
+_ENC_HINT = re.compile(r"(_enc$|_cif|cifrad|encrypted|bidx|blind|_hash$)", re.I)
+
+
 def _classify(name: str, sql_type: str, distinct: int, total: int) -> SemRole:
     t = sql_type.upper()
     numeric = any(k in t for k in ("INT", "REAL", "FLOAT", "NUMER", "DEC", "DOUBLE"))
+    # Columna cifrada / índice ciego: opaca para agregación. Se marca y NO se usa.
+    if "BLOB" in t or "BYTEA" in t or _ENC_HINT.search(name):
+        return "encrypted"
     if _ID_HINT.search(name) and distinct >= total * 0.9:
         return "id"
     if _TEMPORAL.search(name):

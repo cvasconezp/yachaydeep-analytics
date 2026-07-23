@@ -129,6 +129,18 @@
       "title": "Roles",
       "type": "array"
     },
+    "blind_index": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Blind Index",
+      "type": "object"
+    },
+    "k_anon": {
+      "default": 0,
+      "title": "K Anon",
+      "type": "integer"
+    },
     "version": {
       "default": "v1",
       "title": "Version",

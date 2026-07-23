@@ -69,6 +69,13 @@ _SPECS: dict[str, MetricSpec] = {
 }
 
 
+def register(spec: MetricSpec) -> MetricSpec:
+    """Registra (o reemplaza) una métrica. En producción, el registro se genera
+    desde el DATA_DICTIONARY; las apps también pueden añadir las suyas por aquí."""
+    _SPECS[spec.id] = spec
+    return spec
+
+
 def get(metric_id: str) -> MetricSpec:
     if metric_id not in _SPECS:
         raise KeyError(f"Métrica no registrada: {metric_id!r}")

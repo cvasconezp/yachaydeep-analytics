@@ -36,14 +36,22 @@ def build(spec: MetricSpec, query: MetricQuery) -> tuple[str, dict]:
     params: dict = {}
 
     # 1) Dimensiones de desglose (whitelist).
-    dims = []
+    #    Si una dimensión está cifrada, se agrupa por su ÍNDICE CIEGO (blind index):
+    #    permite contar/igualar sin exponer el texto plano. La etiqueta será el hash;
+    #    el motor puede traducirla con el hook decrypt_labels.
+    dims = []          # nombres de salida (alias)
+    group_exprs = []   # columnas reales por las que se agrupa
     for d in query.dimensions:
         if d not in allowed:
             raise ValueError(f"Dimensión no permitida para {spec.id}: {d!r}")
-        dims.append(_check_ident(d))
+        alias = _check_ident(d)
+        real = _check_ident(spec.blind_index.get(d, d))   # blind index si aplica
+        dims.append(alias)
+        group_exprs.append(real)
 
-    # 2) SELECT: dimensiones + medida (alias 'valor').
-    select_cols = [*dims, f"({spec.medida.sql}) AS valor"]
+    # 2) SELECT: dimensiones (alias) + medida (alias 'valor').
+    select_cols = [f"{g} AS {a}" if g != a else a for a, g in zip(dims, group_exprs)]
+    select_cols.append(f"({spec.medida.sql}) AS valor")
     sql = f"SELECT {', '.join(select_cols)} FROM {_check_ident(spec.fuente)}"
 
     # 3) WHERE desde filtros (parametrizado).
@@ -56,12 +64,12 @@ def build(spec: MetricSpec, query: MetricQuery) -> tuple[str, dict]:
     if where:
         sql += " WHERE " + " AND ".join(where)
 
-    # 4) GROUP BY / ORDER BY.
+    # 4) GROUP BY / ORDER BY (se agrupa por la columna real, cifrada o no).
     if dims:
-        sql += " GROUP BY " + ", ".join(dims)
+        sql += " GROUP BY " + ", ".join(group_exprs)
         # temporal → orden cronológico; categórica → por valor desc.
         if len(dims) == 1 and dims[0] == spec.dim_temporal:
-            sql += f" ORDER BY {dims[0]} ASC"
+            sql += f" ORDER BY {group_exprs[0]} ASC"
         else:
             sql += " ORDER BY valor DESC"
 
