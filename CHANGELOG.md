@@ -46,3 +46,11 @@ versionado SemVer. El contrato manda: un cambio incompatible es *major*.
   sin código** (`builder-demo.html`) — las dos piezas para usuarios no técnicos.
 - **Big data**: prueba del motor contra **DuckDB** (columnar) con cientos de miles de
   filas por pushdown (`tests/test_bigdata.py`, extra `[bigdata]`). Doc `ESCALA.md`.
+- **Studio** (`examples/studio`): app autoservicio "sube tu Excel/CSV → tablero"
+  (FastAPI + UI), verificada de punta a punta.
+- **Multi-tenant** (`tenancy`): `TenantResolver`, resolución por subdominio
+  (`tenant_from_host`), aislamiento por Engine y `row_filter`. Con tests. Doc
+  `MULTI-TENANT.md`.
+- Docs de despliegue (`DESPLIEGUE.md`: GitHub + Railway + Vercel) y README reescrito
+  (sector-agnóstico, dos modos). El sistema analiza **cualquier dato cuantitativo de
+  cualquier sector**.

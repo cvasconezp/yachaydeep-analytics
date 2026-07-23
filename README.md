@@ -1,134 +1,122 @@
 # yachaydeep-analytics
 
-**Sistema de representación gráfica de la casa.** Un repo, fuente única, que Core,
-Áncora y Kullki **consumen por versión** — como `@yachaydeep/brand`, pero para datos:
-lee los datos disponibles, los interpreta y genera gráficas dinámicas para la toma de
-decisiones. Vive **dentro** de cada app (nativo, no embebido).
+**Sistema de analítica y visualización de la casa.** Un repo, fuente única, que
+convierte **cualquier dato cuantitativo — de cualquier sector** (educación, turismo,
+empresa, salud, finanzas…) — en tableros y reportes dinámicos para tomar decisiones.
 
-> Convierte datos en decisiones. En el aula, en la empresa y en la comunidad.
+Se usa de **dos formas**:
+
+1. **Dentro de tus apps** (Core, Áncora, Kullki): se instala por versión, como
+   `@yachaydeep/brand`, y vive nativo con la marca de cada producto — no embebido.
+2. **En autoservicio** (Studio): alguien **sube su Excel/CSV o conecta una base** y
+   obtiene un tablero automáticamente, sin escribir código ni DAX. Base para vender
+   suscripciones en `analytics.yachaydeep.com`.
+
+> El motor infiere por la **forma del dato**, no por el negocio: sirve igual para
+> matrículas, ocupación hotelera o ventas por región.
+
+## Qué sabe hacer
+
+- **Entiende los datos** (`profile`): infiere el tipo de cada columna y propone métricas + tablero.
+- **Elige el gráfico** (`resolver`): forma del dato → gráfico correcto (como "Show Me" de Tableau).
+- **Catálogo amplio y accesible**: KPI, línea/área, barras, apiladas, dona, treemap, dispersión,
+  histograma, boxplot, heatmap, embudo, **red (VOSviewer)**, **coroplético de Ecuador** — con
+  **paleta validada** para daltonismo (claro/oscuro) y cross-highlighting.
+- **Relaciones entre tablas, sin DAX** (`model`): detecta las claves foráneas y consulta cruzando
+  tablas armando los JOIN solo.
+- **Limpia tus Excel** (`ingest`): normaliza encabezados, tipos, montos es-EC, duplicados, vacíos.
+- **Pregúntale a tus datos** (`interpret`): lenguaje natural → consulta, con tu LLM (Cerebras/Kimi) o reglas.
+- **Editores para no técnicos**: editor visual de relaciones + constructor de tablero (demos).
+- **Big data**: pushdown a la base; probado con **1M de filas en DuckDB** (~440 ms). Postgres,
+  ClickHouse, BigQuery, Snowflake por DSN.
+- **Multi-tenant** (`tenancy`): aislar inquilinos (Core/Áncora/Kullki → suscriptores).
+- **Seguridad de PII**: índice ciego, k-anonimato, sin llaves en la capa de analítica (LOPDP).
+- **Reportes**: exportar CSV/PNG.
 
 ## Tres artefactos (versionados juntos)
 
 | Paquete | Qué es | Instala |
 |---|---|---|
-| **`@yachaydeep/analytics-contract`** | El **contrato**: tipos TS + JSON Schema. El pegamento que evita desincronización. | `npm i @yachaydeep/analytics-contract` |
-| **`yd-analytics`** (Python) | El **cerebro**: motor, resolver forma→gráfico, grafos, profiler, seguridad, router. | `pip install "yd-analytics[api]"` |
-| **`@yachaydeep/dashboard`** (React) | La **cara**: `Dashboard`, `Panel`, `NetworkView` (estilo VOSviewer). | `npm i @yachaydeep/dashboard` |
+| `@yachaydeep/analytics-contract` | El **contrato**: tipos TS + JSON Schema | `npm i @yachaydeep/analytics-contract` |
+| `yd-analytics` (Python) | El **cerebro**: motor, resolver, grafos, model, profiler, ingest, assist, tenancy | `pip install "yd-analytics[api]"` |
+| `@yachaydeep/dashboard` (React) | La **cara**: `Dashboard`, `Panel`, `NetworkView`, `ChoroplethView` | `npm i @yachaydeep/dashboard` |
 
 ## Estructura
 
 ```
 yachaydeep-analytics/
 ├── packages/
-│   ├── contract/      @yachaydeep/analytics-contract  (tipos TS + schema JSON)
-│   ├── py/            yd-analytics  (registry, engine, resolver, graph, profiler, router)
-│   └── dashboard/     @yachaydeep/dashboard  (Dashboard, Panel, NetworkView, hooks)
+│   ├── contract/    tipos TS + JSON Schema (generado desde Pydantic)
+│   ├── py/          yd-analytics (registry, engine, resolver, graph, model, profiler,
+│   │                ingest, assist, tenancy, security, export, router) + tests
+│   └── dashboard/   @yachaydeep/dashboard (componentes React/ECharts + paleta validada)
 ├── examples/
-│   ├── backend-demo/  app FastAPI que monta make_router
-│   ├── vite-app/      app React que consume @yachaydeep/dashboard (nativo)
-│   └── standalone-html/  cuatro demos autocontenidos (abrir en el navegador)
-├── docs/              DASHBOARD.md (arquitectura) · DISTRIBUCION.md (paquetes y consumo)
-└── scripts/           gen_schema.py (JSON Schema desde los modelos Pydantic)
+│   ├── studio/          app "sube tus datos → tablero" (FastAPI + UI)  ← autoservicio
+│   ├── backend-demo/    app FastAPI mínima que monta make_router
+│   ├── vite-app/        app React que consume @yachaydeep/dashboard (nativo)
+│   └── standalone-html/ 9 demos autocontenidos (abrir en el navegador)
+├── docs/            DASHBOARD · DISTRIBUCION · DESIGN-SYSTEM · VS-POWERBI · SEGURIDAD-DATOS
+│                    · ESCALA · MULTI-TENANT · DESPLIEGUE
+└── scripts/         gen_schema.py
 ```
 
-## Empezar en 2 minutos
+## Empezar
 
-**Cerebro + backend de ejemplo:**
-
+**Modo autoservicio (Studio) — sube datos y obtén tablero:**
 ```bash
-cd packages/py && pip install -e .[dev] && pytest        # 16 pruebas verdes
-cd ../../examples/backend-demo
-python seed_demo.py && python seed_graph.py
-uvicorn app:app --reload                                  # http://127.0.0.1:8000/docs
+cd examples/studio && pip install -e ../../packages/py[api,ingest] python-multipart uvicorn
+uvicorn app:app --reload          # http://127.0.0.1:8000 → sube ejemplo.csv
+```
+
+**Cerebro + pruebas:**
+```bash
+cd packages/py && pip install -e .[dev] && pytest      # 41 pruebas verdes
 ```
 
 **Cara (React), consumo nativo:**
-
 ```bash
-npm install && npm run build          # compila contract + dashboard
+npm install && npm run build
 npm --workspace example-vite-app run dev
 ```
 
-**Solo mirar:** abre cualquier archivo de `examples/standalone-html/` — traen ECharts
-incrustado y corren sin servidor:
-`dashboard-demo`, `powerbi-demo` (cross-highlighting), `graph-demo`, `vosviewer-demo`,
-`gallery-demo` (catálogo completo), `ask-demo` («pregúntale a tus datos»),
-`ingest-demo` (subir/limpiar Excel), **`model-editor-demo`** (editor visual de
-relaciones, tipo Power Pivot) y **`builder-demo`** (constructor de tablero sin código).
+**Solo mirar** (`examples/standalone-html/`, sin servidor): `dashboard-demo`,
+`powerbi-demo` (cross-highlighting), `graph-demo`, `vosviewer-demo`, `gallery-demo`
+(catálogo completo), `ask-demo` («pregúntale a tus datos»), `ingest-demo` (subir/limpiar),
+`model-editor-demo` (relaciones tipo Power Pivot), `builder-demo` (constructor de tablero).
 
 ## Cómo lo consume una app (Core / Áncora / Kullki)
 
 ```python
-# backend (FastAPI de la app)
 from yd_analytics import make_router
 app.include_router(make_router(get_engine=get_engine, get_role=deps_de_yd_auth))
 ```
-
 ```tsx
-// frontend (rutas propias de la app, con sus tokens de marca)
 import { Dashboard, NetworkView } from "@yachaydeep/dashboard";
 <Dashboard spec={miDashboardSpec} />
-<NetworkView data={red} colorBy="overlay" />
 ```
-
 El mismo tablero se ve **ámbar en Áncora y verde en Kullki** sin tocar el paquete.
 
-## Analiza los datos y propone el tablero (profiler)
+## Relaciones sin DAX + preguntar
 
 ```python
-from yd_analytics import profile
-p = profile(engine, "evaluacion_riesgo")
-p.columns     # tipo semántico de cada campo (temporal, categórico, numérico, id…)
-p.metrics     # métricas candidatas (conteo, promedios…)
-p.dashboard   # DashboardSpec inicial, listo para revisar y afinar
+from yd_analytics import build_model, query_related, interpret, openai_compatible_llm
+model = build_model(engine, ["ventas", "sucursales", "productos"])   # detecta las relaciones
+rows  = query_related(engine, model, fact="ventas", measure="SUM(monto)",
+                      dimension="ciudad", dim_table="sucursales")     # el JOIN lo arma solo
+llm   = openai_compatible_llm("https://api.cerebras.ai/v1", KEY, "llama-3.3-70b")
+sug   = interpret("ventas por ciudad", llm=llm)                      # NL → consulta + gráfico
 ```
-
-## ¿Tienes Excel? Ingesta + limpieza en un paso
-
-```python
-from yd_analytics import ingest          # requiere el extra [ingest] (pandas)
-rep = ingest("aportes.xlsx", engine, "aportes")
-rep.issues     # ["encabezados normalizados", "3 duplicados eliminados", …]
-rep.columns    # tipos inferidos de cada columna ya limpia
-rep.profile    # métricas y DashboardSpec propuestos sobre los datos limpios
-```
-
-Lee Excel/CSV, normaliza encabezados y tipos (incluye montos es-EC), quita vacíos y
-duplicados, carga a la BD y perfila — listo para graficar.
-
-## Pregúntale a tus datos (asistencia)
-
-```python
-from yd_analytics import interpret, openai_compatible_llm
-llm = openai_compatible_llm("https://api.cerebras.ai/v1", KEY, "llama-3.3-70b")  # o Kimi
-sug = interpret("¿riesgo por carrera?", llm=llm)   # → MetricQuery + gráfico sugerido
-```
-
-Endpoint listo: `POST /analytics/assist {"question": "..."}`. Sin LLM usa reglas offline.
-En la app real: `make_router(get_engine=..., assist_llm=openai_compatible_llm(...))`.
-
-## Relaciones entre tablas, sin DAX ni Power Pivot
-
-```python
-from yd_analytics import build_model, query_related
-model = build_model(engine, ["estudiantes", "carreras", "jornadas"])
-model.relationships          # detectadas solas: estudiantes.carrera_id → carreras.id …
-# consulta cruzando tablas — el JOIN lo arma el modelo, no tú:
-rows = query_related(engine, model, fact="estudiantes", measure="COUNT(*)",
-                     dimension="nombre", dim_table="carreras")
-```
-
-Sube o conecta una base → el sistema descubre cómo se unen las tablas → preguntas.
-Ver [`docs/VS-POWERBI.md`](docs/VS-POWERBI.md).
 
 ## Documentación
 
-- [`docs/DASHBOARD.md`](docs/DASHBOARD.md) — arquitectura del sistema (capas, contratos, resolver).
-- [`docs/DISTRIBUCION.md`](docs/DISTRIBUCION.md) — modelo de paquetes, consumo nativo y gobernanza.
-- [`docs/DESIGN-SYSTEM.md`](docs/DESIGN-SYSTEM.md) — tokens, paleta validada, catálogo de gráficos, estados y accesibilidad.
-- [`docs/VS-POWERBI.md`](docs/VS-POWERBI.md) — cómo igualar y superar a Power BI (mapa de features y hoja de ruta).
-- [`docs/SEGURIDAD-DATOS.md`](docs/SEGURIDAD-DATOS.md) — analítica sobre datos cifrados (índice ciego, k-anon).
-- [`docs/ESCALA.md`](docs/ESCALA.md) — big data: pushdown y motores columnares (DuckDB/ClickHouse/BigQuery).
+- [`DASHBOARD.md`](docs/DASHBOARD.md) — arquitectura del sistema.
+- [`DISTRIBUCION.md`](docs/DISTRIBUCION.md) — paquetes, consumo nativo y gobernanza.
+- [`DESIGN-SYSTEM.md`](docs/DESIGN-SYSTEM.md) — tokens, paleta validada, catálogo, accesibilidad.
+- [`VS-POWERBI.md`](docs/VS-POWERBI.md) — cómo igualar y superar a Power BI.
+- [`SEGURIDAD-DATOS.md`](docs/SEGURIDAD-DATOS.md) — analítica sobre datos cifrados.
+- [`ESCALA.md`](docs/ESCALA.md) — big data (pushdown, motores columnares).
+- [`MULTI-TENANT.md`](docs/MULTI-TENANT.md) — inquilinos y suscripciones.
+- [`DESPLIEGUE.md`](docs/DESPLIEGUE.md) — GitHub + Railway + Vercel, dominio `analytics.yachaydeep.com`.
 
 ## Licencia
 

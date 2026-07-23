@@ -25,6 +25,7 @@ from .export import to_csv
 from .graph import run_graph
 from .model import Model, Relationship, build_model, detect_relationships, query_related
 from .profiler import ProfiledColumn, ProfileResult, profile
+from .tenancy import Tenant, TenantResolver, make_get_engine, row_filter, tenant_from_host
 from .schemas import (
     ChartSpec, Filter, GraphEdge, GraphNode, GraphResult, GraphSpec,
     MetricQuery, MetricResult, MetricSpec, PanelResponse,
@@ -36,6 +37,7 @@ __all__ = [
     "run_query", "run_graph", "profile", "interpret", "openai_compatible_llm",
     "ingest", "to_csv", "make_router",
     "detect_relationships", "build_model", "query_related", "Model", "Relationship",
+    "TenantResolver", "Tenant", "make_get_engine", "tenant_from_host", "row_filter",
     "registry", "resolver", "graph",
     "MetricQuery", "MetricResult", "MetricSpec", "ChartSpec", "Filter",
     "GraphSpec", "GraphNode", "GraphEdge", "GraphResult", "PanelResponse",

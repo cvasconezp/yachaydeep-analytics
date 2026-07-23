@@ -1,0 +1,4 @@
+# Para desplegar el Studio (Railway u otro). Instala el paquete del monorepo + extras.
+-e ../../packages/py[api,ingest]
+python-multipart>=0.0.9
+uvicorn[standard]>=0.30
