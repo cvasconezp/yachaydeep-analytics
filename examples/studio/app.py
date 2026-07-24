@@ -22,7 +22,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 
 from yd_analytics import (MetricQuery, build_model, ingest, make_auth, make_router,
-                          registry, report, run_query, stats, telemetry)
+                          openai_compatible_llm, registry, report, run_query, stats,
+                          telemetry)
 from yd_analytics.auth import allowed_origins
 
 HERE = os.path.dirname(__file__)
@@ -51,9 +52,22 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+# --- Asistente en lenguaje natural (Cerebras / OpenAI-compatible) ------------ #
+# Se activa SOLO si hay clave en el entorno; si no, /assist usa reglas offline.
+# En Railway define: LLM_API_KEY (o CEREBRAS_API_KEY), y opcionalmente LLM_BASE_URL
+# (por defecto Cerebras) y LLM_MODEL.
+_llm = None
+_llm_key = os.environ.get("LLM_API_KEY") or os.environ.get("CEREBRAS_API_KEY")
+if _llm_key:
+    _llm = openai_compatible_llm(
+        os.environ.get("LLM_BASE_URL", "https://api.cerebras.ai/v1"),
+        _llm_key,
+        os.environ.get("LLM_MODEL", "llama-3.3-70b"),
+    )
+
 # El router de datos (/analytics/query, /assist, /graph) usa la API key para
 # resolver el ROL; los endpoints extra abajo exigen una llave válida.
-app.include_router(make_router(get_engine=get_engine, get_role=auth.get_role))
+app.include_router(make_router(get_engine=get_engine, get_role=auth.get_role, assist_llm=_llm))
 _protected = [Depends(auth.get_principal)]
 
 # --- Telemetría de producto (uso de Core/Áncora/Kullki y otras apps) --------- #
@@ -171,4 +185,5 @@ def build_report_endpoint(payload: dict = Body(default={})):
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "tables": _tables}
+    return {"status": "ok", "tables": _tables,
+            "asistente": "llm" if _llm else "reglas"}
