@@ -27,7 +27,15 @@ from yd_analytics.auth import allowed_origins
 
 HERE = os.path.dirname(__file__)
 DB = os.path.join(HERE, "studio.db")
-_engine: Engine = create_engine(f"sqlite:///{DB}", connect_args={"check_same_thread": False})
+
+# Producción: ANALYTICS_DB_URL apunta a la BD de la app (Postgres de Core, idealmente una
+# VISTA de solo lectura sin PII — ver scripts/core_readonly_view.sql). Sin la variable,
+# arranca con el SQLite de demo (studio.db) — el estado "tables: []" del health check.
+_DB_URL = os.environ.get("ANALYTICS_DB_URL")
+if _DB_URL:
+    _engine: Engine = create_engine(_DB_URL, pool_pre_ping=True)
+else:
+    _engine: Engine = create_engine(f"sqlite:///{DB}", connect_args={"check_same_thread": False})
 _tables: list[str] = []
 _last_dashboard: list[dict] = []   # paneles del último tablero propuesto (para el informe)
 
@@ -59,6 +67,14 @@ _protected = [Depends(auth.get_principal)]
 # --- Telemetría de producto (uso de Core/Áncora/Kullki y otras apps) --------- #
 telemetry.ensure_events_table(_engine)
 telemetry.register_telemetry()   # publica uso_usuarios_activos, uso_top_pantallas, ...
+
+# Métricas por app (Track A, paso 3). Cada app declara las suyas en yd_analytics/apps/.
+try:
+    from yd_analytics.apps import core as _core_app
+    _ids = _core_app.register_all()
+    print(f"[analytics] métricas de Core registradas: {len(_ids)} ({', '.join(_ids)})")
+except Exception as _e:  # no tumbar el arranque si una app falla
+    print(f"[analytics] aviso: no se registraron las métricas de Core: {_e}")
 
 
 @app.post("/telemetry/collect", dependencies=_protected)
