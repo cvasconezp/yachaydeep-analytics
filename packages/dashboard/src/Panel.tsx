@@ -36,7 +36,7 @@ export function Panel({ spec }: { spec: PanelSpec }) {
   }
 
   // Interacción: clic en una marca emite un filtro (cross-filtering).
-  const onEvents = chart.interactions.emits_filter
+  const onEvents: Record<string, (p: any) => void> = chart.interactions.emits_filter
     ? {
         click: (p: any) => {
           const field = chart.interactions.emits_filter!;
