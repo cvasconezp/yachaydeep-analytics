@@ -3,7 +3,17 @@ name: CI
 on:
   push:
     branches: [main]
+    # No gastar minutos de Actions en cambios solo de landing/SEO/docs
+    # (la landing estática se despliega por Vercel, no necesita este CI).
+    paths-ignore:
+      - 'examples/standalone-html/**'
+      - 'docs/**'
+      - '**/*.md'
   pull_request:
+    paths-ignore:
+      - 'examples/standalone-html/**'
+      - 'docs/**'
+      - '**/*.md'
 
 jobs:
   python:
