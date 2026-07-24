@@ -54,7 +54,7 @@ CORE_VISTA_GENERAL = [
         id="promedio_calificaciones", clase="uso", titulo="Prom. calificaciones",
         descripcion="Promedio de notas finales.", shape="scalar", unidad="puntos",
         formato="number", fuente="grades",
-        medida=Measure(sql="ROUND(AVG(nota_final), 2)"),
+        medida=Measure(sql="ROUND(CAST(AVG(nota_final) AS numeric), 2)"),
         grano=["periodo", "carrera"], dim_temporal="periodo", version="v1",
     ),
     MetricSpec(
