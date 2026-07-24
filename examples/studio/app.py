@@ -132,8 +132,16 @@ def build_report_endpoint(payload: dict = Body(default={})):
     panels_in = payload.get("panels") or _last_dashboard
     paneles = []
     for p in panels_in:
+        # Paneles directos (ya traen sus datos): proporción {k,n} o filas propias.
+        if p.get("shape") == "proportion" or p.get("rows") is not None:
+            paneles.append(p)
+            continue
+        # Paneles por métrica: se resuelven con el motor.
+        metric = p.get("metric")
+        if not metric:
+            continue
         try:
-            titulo, shape, rows, cols = _panel_data(p["metric"], p.get("dimensions"))
+            titulo, shape, rows, cols = _panel_data(metric, p.get("dimensions"))
         except Exception:
             continue
         paneles.append({"titulo": p.get("titulo") or titulo, "shape": shape,
