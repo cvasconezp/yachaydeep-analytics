@@ -17,16 +17,18 @@ import tempfile
 
 from fastapi import Body, FastAPI, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 
-from yd_analytics import build_model, ingest, make_router, registry, telemetry
+from yd_analytics import (MetricQuery, build_model, ingest, make_router, registry,
+                          report, run_query, stats, telemetry)
 
 HERE = os.path.dirname(__file__)
 DB = os.path.join(HERE, "studio.db")
 _engine: Engine = create_engine(f"sqlite:///{DB}", connect_args={"check_same_thread": False})
 _tables: list[str] = []
+_last_dashboard: list[dict] = []   # paneles del último tablero propuesto (para el informe)
 
 
 def get_engine() -> Engine:
@@ -81,6 +83,9 @@ async def ingest_file(file: UploadFile):
         registry.register(m)
     if table not in _tables:
         _tables.append(table)
+    # recordar los paneles propuestos para el informe (/report)
+    global _last_dashboard
+    _last_dashboard = rep.profile.dashboard.get("paneles", [])
 
     # relaciones entre todas las tablas cargadas (si hay varias)
     rels = []
@@ -96,6 +101,47 @@ async def ingest_file(file: UploadFile):
         "dashboard": rep.profile.dashboard,
         "relationships": rels,
     }
+
+
+# --- Estadística real e informe --------------------------------------------- #
+
+def _panel_data(metric: str, dimensions: list[str] | None):
+    """Corre una métrica y devuelve (título, forma, filas, columnas)."""
+    resp = run_query(get_engine(), MetricQuery(metric=metric, dimensions=dimensions or []))
+    spec = registry.get(metric)
+    r = resp.result
+    return spec.titulo, r.shape, r.rows, r.columns
+
+
+@app.post("/analytics/stats")
+def analytics_stats(payload: dict = Body(...)):
+    """Estadística real (descriptiva + inferencial) de una métrica."""
+    metric = payload.get("metric")
+    dims = payload.get("dimensions") or []
+    titulo, shape, rows, cols = _panel_data(metric, dims)
+    return {"metric": metric, "titulo": titulo,
+            "stats": stats.summarize_result(shape, rows, cols)}
+
+
+@app.post("/report")
+def build_report_endpoint(payload: dict = Body(default={})):
+    """Genera un INFORME en HTML con resúmenes de cada gráfico.
+
+    Cuerpo opcional: {"titulo": "...", "panels": [{"metric": "...", "dimensions": [...],
+    "titulo": "..."}]}. Si no se pasan paneles, usa el último tablero propuesto."""
+    panels_in = payload.get("panels") or _last_dashboard
+    paneles = []
+    for p in panels_in:
+        try:
+            titulo, shape, rows, cols = _panel_data(p["metric"], p.get("dimensions"))
+        except Exception:
+            continue
+        paneles.append({"titulo": p.get("titulo") or titulo, "shape": shape,
+                        "rows": rows, "columns": cols})
+    html = report.build_report(
+        paneles, titulo=payload.get("titulo", "Informe de análisis"),
+        subtitulo="Estadística real · resúmenes por gráfico")
+    return HTMLResponse(content=html)
 
 
 @app.get("/health")

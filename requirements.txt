@@ -1,5 +1,5 @@
 # Despliegue del backend (Studio) en Railway — build desde la RAÍZ del repo.
 # Root Directory en Railway = vacío (raíz). Nixpacks detecta Python por este archivo.
-./packages/py[api,ingest]
+./packages/py[api,ingest,stats]
 python-multipart>=0.0.9
 uvicorn[standard]>=0.30

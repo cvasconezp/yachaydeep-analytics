@@ -7,7 +7,7 @@ WORKDIR /app
 COPY . .
 
 # Instala el paquete de la casa + lo necesario para servir el Studio.
-RUN pip install --no-cache-dir "./packages/py[api,ingest]" python-multipart "uvicorn[standard]"
+RUN pip install --no-cache-dir "./packages/py[api,ingest,stats]" python-multipart "uvicorn[standard]"
 
 ENV PORT=8000
 EXPOSE 8000
