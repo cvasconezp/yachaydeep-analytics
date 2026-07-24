@@ -183,6 +183,23 @@
   details.item .body code{font-family:"Spline Sans Mono",monospace;font-size:12.5px;background:#eef1f5;padding:1px 6px;border-radius:5px;color:var(--brand)}
   details.item .body b{color:var(--ink)}
   @media(max-width:560px){details.item .body{padding-left:18px}}
+  /* Un solo acordeón técnico: al abrir muestra todo en grilla */
+  .tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 30px;padding:6px 20px 22px}
+  @media(max-width:720px){.tech-grid{grid-template-columns:1fr;padding:6px 18px 18px}}
+  .tsub{padding:14px 0;border-top:1px solid var(--border)}
+  .tech-grid .tsub:nth-child(-n+2){border-top:0}
+  @media(max-width:720px){.tech-grid .tsub:first-child{border-top:0}.tech-grid .tsub:nth-child(2){border-top:1px solid var(--border)}}
+  .tsub .th{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .tsub .th h4{margin:0;font-size:15px}
+  .tsub p{margin:0 0 7px;color:var(--ink2);font-size:13.5px;line-height:1.55}
+  /* Scrollspy: barra de secciones (visible en móvil) */
+  .spy-bar{display:none}
+  @media(max-width:820px){
+    .spy-bar{display:flex;gap:8px;overflow-x:auto;position:sticky;top:64px;z-index:40;background:rgba(15,36,68,.94);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08);padding:9px 16px;scrollbar-width:none}
+    .spy-bar::-webkit-scrollbar{display:none}
+    .spy-bar a{flex:none;font-size:13px;color:#cdd8ea;padding:6px 13px;border-radius:999px;border:1px solid rgba(255,255,255,.16);white-space:nowrap;font-weight:500}
+    .spy-bar a.active{color:var(--brand-dark);background:var(--gold);border-color:var(--gold);font-weight:700}
+  }
   code{font-family:"Spline Sans Mono",monospace;font-size:12.5px;background:#eef1f5;padding:2px 7px;border-radius:6px;color:var(--brand)}
   .muted{color:var(--muted);font-size:13px;margin-top:14px}
 </style>
@@ -213,6 +230,14 @@
     </div>
   </div>
 </header>
+
+<nav class="spy-bar" aria-label="Secciones">
+  <a href="#como">Cómo funciona</a>
+  <a href="#capacidades">Capacidades</a>
+  <a href="#modos">Modos</a>
+  <a href="#tecnico">Técnico</a>
+  <a href="#demos">Demos</a>
+</nav>
 
 <main id="top">
 <section class="hero" aria-labelledby="hero-title">
@@ -381,64 +406,50 @@
     <div class="sec-head">
       <span class="kicker">Para equipos técnicos</span>
       <h2 id="tec-title">Qué hay bajo el capó</h2>
-      <p>Sin caja negra: así limpiamos los datos, calculamos y graficamos. Toca cada punto para desplegarlo.</p>
+      <p>Sin caja negra: así limpiamos los datos, calculamos y graficamos. Ábrelo para ver el detalle técnico.</p>
     </div>
     <div class="acc">
 
-      <details class="item">
-        <summary><span class="ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7c0-1.7 3.6-3 8-3s8 1.3 8 3-3.6 3-8 3-8-1.3-8-3z"/><path d="M4 7v10c0 1.7 3.6 3 8 3s8-1.3 8-3V7" stroke-linecap="round"/></svg></span>
-        Limpieza y normalización de datos <svg class="chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
-        <div class="body">
-          <p>La ingesta lee tu <b>Excel/CSV</b> con <b>pandas</b>: detecta y arregla encabezados desordenados, infiere y castea el tipo de cada columna (fechas, números, texto), interpreta montos en formato <b>es-EC</b> (<code>1.234,56</code>), elimina duplicados y normaliza los nombres de columna.</p>
-          <p>Después, un <b>perfilador</b> clasifica cada columna (temporal, categórica, numérica, identificador, booleana, geográfica o cifrada) y propone métricas y un tablero. Todo queda cargado y consultable — sin que tú toques una fórmula.</p>
-        </div>
-      </details>
+      <details class="item tech-one">
+        <summary><span class="ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19 12a7 7 0 00-.1-1l2-1.6-2-3.4-2.3 1a7 7 0 00-1.7-1l-.3-2.4H10.4L10 5a7 7 0 00-1.7 1l-2.3-1-2 3.4 2 1.6a7 7 0 000 2l-2 1.6 2 3.4 2.3-1a7 7 0 001.7 1l.3 2.4h3.2l.3-2.4a7 7 0 001.7-1l2.3 1 2-3.4-2-1.6a7 7 0 00.1-1z" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        Ver el detalle técnico <svg class="chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+        <div class="tech-grid">
 
-      <details class="item">
-        <summary><span class="ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 3H5a2 2 0 00-2 2v3M16 3h3a2 2 0 012 2v3M8 21H5a2 2 0 01-2-2v-3M16 21h3a2 2 0 002-2v-3" stroke-linecap="round"/><path d="M9 9l6 6M15 9l-6 6" stroke-linecap="round"/></svg></span>
-        Cálculos en Python (estadística real) <svg class="chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
-        <div class="body">
-          <p>Los estadísticos se calculan con <b>numpy</b> y <b>scipy</b> — no se estiman a ojo: regresión lineal <code>OLS</code> (pendiente, R², p), <b>Mann-Kendall</b> para tendencia, intervalos de confianza (t de Student y <b>Wilson</b>), correlación de <b>Pearson</b> y <b>Spearman</b>, <b>χ²</b> y V de Cramér, <b>ANOVA</b>/Kruskal-Wallis, concentración (HHI, Gini) y <b>margen de error</b> con corrección por población finita.</p>
-          <p>Las agregaciones se resuelven con <b>SQL</b> empujado (<i>pushdown</i>) al motor — Postgres, o columnar como <b>DuckDB/ClickHouse/BigQuery</b> — no en la memoria del navegador. Por eso escala a millones de filas.</p>
-        </div>
-      </details>
+          <div class="tsub">
+            <div class="th"><span class="ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7c0-1.7 3.6-3 8-3s8 1.3 8 3-3.6 3-8 3-8-1.3-8-3z"/><path d="M4 7v10c0 1.7 3.6 3 8 3s8-1.3 8-3V7" stroke-linecap="round"/></svg></span><h4>Limpieza y normalización de datos</h4></div>
+            <p>La ingesta lee tu <b>Excel/CSV</b> con <b>pandas</b>: detecta y arregla encabezados desordenados, infiere y castea el tipo de cada columna (fechas, números, texto), interpreta montos en formato <b>es-EC</b> (<code>1.234,56</code>), elimina duplicados y normaliza los nombres de columna.</p>
+            <p>Después, un <b>perfilador</b> clasifica cada columna (temporal, categórica, numérica, identificador, booleana, geográfica o cifrada) y propone métricas y un tablero — sin que toques una fórmula.</p>
+          </div>
 
-      <details class="item">
-        <summary><span class="ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 3v18h18" stroke-linecap="round"/><path d="M7 14l3-3 3 2 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        Cómo se eligen y renderizan las gráficas <svg class="chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
-        <div class="body">
-          <p>Un <b>resolver</b> mira la <i>forma real</i> del dato después de consultarlo (cardinalidad, tipo, si hay dimensión temporal) y elige el gráfico correcto — barra, línea, dispersión, histograma, grafo — sin que tú lo configures.</p>
-          <p>Se renderiza con <b>ECharts</b> (canvas/SVG) dentro de React, con una <b>paleta categórica validada para daltonismo</b>: los colores se <i>computan</i> con un validador (banda de luminosidad, croma, separación CVD y contraste) en claro y oscuro — no se eligen a ojo. El violeta se reserva a terceros.</p>
-        </div>
-      </details>
+          <div class="tsub">
+            <div class="th"><span class="ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 3H5a2 2 0 00-2 2v3M16 3h3a2 2 0 012 2v3M8 21H5a2 2 0 01-2-2v-3M16 21h3a2 2 0 002-2v-3" stroke-linecap="round"/><path d="M9 9l6 6M15 9l-6 6" stroke-linecap="round"/></svg></span><h4>Cálculos en Python (estadística real)</h4></div>
+            <p>Se calculan con <b>numpy</b> y <b>scipy</b> — no se estiman a ojo: regresión <code>OLS</code> (pendiente, R², p), <b>Mann-Kendall</b>, intervalos de confianza (t de Student y <b>Wilson</b>), correlación de <b>Pearson</b>/<b>Spearman</b>, <b>χ²</b> y V de Cramér, <b>ANOVA</b>/Kruskal-Wallis, concentración (HHI, Gini) y <b>margen de error</b>.</p>
+            <p>Las agregaciones se resuelven con <b>SQL</b> empujado (<i>pushdown</i>) al motor — Postgres o columnar (<b>DuckDB/ClickHouse/BigQuery</b>), no en el navegador. Por eso escala a millones de filas.</p>
+          </div>
 
-      <details class="item">
-        <summary><span class="ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
-        Arquitectura y contrato <svg class="chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
-        <div class="body">
-          <p>Tres artefactos <b>versionados</b>: un <b>contrato</b> (TypeScript + JSON Schema), el <b>cerebro</b> en Python (motor, resolver, perfilador, estadística) y la <b>cara</b> en React. Las métricas viven en un registro con SQL en <b>lista blanca</b> — sin lenguajes de fórmulas propietarios, y las relaciones entre tablas se detectan solas.</p>
-          <p>Se instala por versión (<code>npm i @tu-org/dashboard</code>, <code>pip install</code>) y se embebe en tus apps, o corre en autoservicio. Motor <b>agnóstico</b> vía SQLAlchemy: cambias el DSN y listo.</p>
-        </div>
-      </details>
+          <div class="tsub">
+            <div class="th"><span class="ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 3v18h18" stroke-linecap="round"/><path d="M7 14l3-3 3 2 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h4>Cómo se eligen y renderizan las gráficas</h4></div>
+            <p>Un <b>resolver</b> mira la <i>forma real</i> del dato tras consultarlo (cardinalidad, tipo, dimensión temporal) y elige el gráfico correcto — barra, línea, dispersión, histograma, grafo — sin que lo configures.</p>
+            <p>Se renderiza con <b>ECharts</b> (canvas/SVG) en React, con una <b>paleta validada para daltonismo</b>: los colores se <i>computan</i> con un validador (luminosidad, croma, separación CVD y contraste) en claro y oscuro — no a ojo.</p>
+          </div>
 
-      <details class="item">
-        <summary><span class="ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        Seguridad, privacidad y escala <svg class="chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
-        <div class="body">
-          <p>Multi-inquilino <b>aislado</b> (por base, esquema o fila). La PII se maneja con <b>índice ciego</b> y <b>k-anonimato</b>; el paquete <b>nunca guarda tus llaves</b> — el descifrado ocurre por un hook que tú controlas. Los conteos de personas se suprimen si el grupo es diminuto (LOPDP).</p>
-          <p>Tus datos y tus llaves <b>no salen de tu servidor</b>. La escala viene del pushdown al motor columnar, no de traer todo al cliente.</p>
-        </div>
-      </details>
+          <div class="tsub">
+            <div class="th"><span class="ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><h4>Arquitectura y contrato</h4></div>
+            <p>Tres artefactos <b>versionados</b>: un <b>contrato</b> (TypeScript + JSON Schema), el <b>cerebro</b> en Python (motor, resolver, perfilador, estadística) y la <b>cara</b> en React. Métricas en un registro con SQL en <b>lista blanca</b> — sin lenguajes de fórmulas propietarios; las relaciones se detectan solas.</p>
+            <p>Se instala por versión (<code>npm i</code>, <code>pip install</code>) y se embebe en tus apps, o corre en autoservicio. Motor <b>agnóstico</b> vía SQLAlchemy: cambias el DSN y listo.</p>
+          </div>
 
-      <details class="item">
-        <summary><span class="ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        Por qué compite con una BI tradicional <svg class="chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
-        <div class="body">
-          <p>• Se <b>embebe</b> dentro de tus productos con su marca — no es una herramienta aparte a la que mandas a la gente.</p>
-          <p>• Tus datos y llaves <b>viven en tu servidor</b>; nada se sube a una nube de terceros.</p>
-          <p>• <b>Sin lenguajes de fórmulas propietarios</b>: preguntas en tu idioma y las relaciones se infieren solas.</p>
-          <p>• Motor <b>agnóstico</b> y con <i>pushdown</i> a bases columnares para gran escala.</p>
-          <p>• <b>Abierto y versionado</b> (npm/pip), auditable — no una caja negra con licencia por usuario.</p>
+          <div class="tsub">
+            <div class="th"><span class="ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h4>Seguridad, privacidad y escala</h4></div>
+            <p>Multi-inquilino <b>aislado</b> (por base, esquema o fila). PII con <b>índice ciego</b> y <b>k-anonimato</b>; el paquete <b>nunca guarda tus llaves</b> — el descifrado ocurre por un hook que tú controlas. Los conteos de personas se suprimen si el grupo es diminuto (LOPDP).</p>
+            <p>Tus datos y tus llaves <b>no salen de tu servidor</b>. La escala viene del pushdown al motor columnar, no de traer todo al cliente.</p>
+          </div>
+
+          <div class="tsub">
+            <div class="th"><span class="ico-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h4>Por qué compite con una BI tradicional</h4></div>
+            <p>Se <b>embebe</b> dentro de tus productos con su marca; tus datos y llaves <b>viven en tu servidor</b>; <b>sin lenguajes de fórmulas propietarios</b> (preguntas en tu idioma); motor <b>agnóstico</b> con pushdown para gran escala; y <b>abierto y versionado</b> (npm/pip), auditable — no una caja negra con licencia por usuario.</p>
+          </div>
+
         </div>
       </details>
 
@@ -548,24 +559,47 @@
 </footer>
 
 <script>
-/* Scrollspy: resalta el enlace de navegación de la sección visible. */
+/* Scrollspy: resalta la sección visible en la nav del header y en la barra móvil. */
 (function () {
-  var links = [].slice.call(document.querySelectorAll('.nav-links a[href^="#"]'));
-  var map = {};
-  links.forEach(function (a) { var id = a.getAttribute('href').slice(1); if (id) map[id] = a; });
-  var sections = Object.keys(map).map(function (id) { return document.getElementById(id); }).filter(Boolean);
-  if (!('IntersectionObserver' in window) || !sections.length) return;
+  var links = [].slice.call(document.querySelectorAll('.nav-links a[href^="#"], .spy-bar a[href^="#"]'));
+  if (!links.length) return;
+  var ids = [], seen = {};
+  links.forEach(function (a) {
+    var id = a.getAttribute('href').slice(1);
+    if (id && !seen[id] && document.getElementById(id)) { seen[id] = 1; ids.push(id); }
+  });
+  var bar = document.querySelector('.spy-bar');
   var current = null;
   function setActive(id) {
     if (id === current) return;
     current = id;
-    links.forEach(function (a) { a.classList.remove('active'); });
-    if (map[id]) map[id].classList.add('active');
+    links.forEach(function (a) { a.classList.toggle('active', a.getAttribute('href') === '#' + id); });
+    // centra la pastilla activa en la barra móvil
+    if (bar) {
+      var act = bar.querySelector('a.active');
+      if (act) bar.scrollTo({ left: act.offsetLeft - bar.clientWidth / 2 + act.clientWidth / 2, behavior: 'smooth' });
+    }
   }
-  var obs = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) { if (e.isIntersecting) setActive(e.target.id); });
-  }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
-  sections.forEach(function (s) { obs.observe(s); });
+  var ticking = false;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      var pos = window.scrollY + 150;   // offset bajo el header fijo
+      var cur = ids[0];
+      for (var i = 0; i < ids.length; i++) {
+        var el = document.getElementById(ids[i]);
+        if (el && el.offsetTop <= pos) cur = ids[i];
+      }
+      // si estamos casi al final, marca la última
+      if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 4) cur = ids[ids.length - 1];
+      setActive(cur);
+      ticking = false;
+    });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  onScroll();
 })();
 </script>
 </body>
