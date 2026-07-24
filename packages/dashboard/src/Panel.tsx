@@ -29,8 +29,7 @@ export function Panel({ spec }: { spec: PanelSpec }) {
     return (
       <div className="yd-panel yd-kpi">
         <div className="yd-kpi__value">{fmt(valor, result.formato)}</div>
-        <div className="yd-kpi__label">{spec.metric}</div>
-        <span className={`yd-badge yd-badge--${result.meta.clase}`}>{String(result.meta.clase)}</span>
+        <div className="yd-kpi__label">{spec.titulo ?? spec.metric}</div>
       </div>
     );
   }
@@ -49,8 +48,8 @@ export function Panel({ spec }: { spec: PanelSpec }) {
   return (
     <div className="yd-panel">
       <div className="yd-panel__head">
-        <h3>{spec.metric}</h3>
-        {chart.note && <p className="yd-panel__note">{chart.note}</p>}
+        <h3>{spec.titulo ?? spec.metric}</h3>
+        {(spec.nota || chart.note) && <p className="yd-panel__note">{spec.nota ?? chart.note}</p>}
       </div>
       <ReactECharts option={option} onEvents={onEvents} style={{ height: 280 }} notMerge />
     </div>
