@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Yachay Deep Analytics — Telemetría de producto (demo)</title>
+<meta name="description" content="Tablero de uso: usuarios activos, pantallas más visitadas, dispositivos y reparto por producto (Core, Áncora, Kullki). La app se analiza a sí misma." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{--brand:#1B3A6B;--brand-dark:#0F2444;--brand-light:#2B5AA0;--gold:#E8A838;
+    --ink:#101418;--ink2:#52514e;--muted:#898781;--bg:#f4f5f2;--surface:#fff;--border:#e4e3dc;
+    --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;
+    --shadow:0 1px 2px rgba(15,36,68,.06),0 12px 30px -14px rgba(15,36,68,.18)}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Instrument Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+  header{background:linear-gradient(150deg,var(--brand-dark),var(--brand));color:#fff;padding:26px 0}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  .back{font-size:13.5px;color:#cdd8ea}.back:hover{color:#fff}
+  h1{font-size:clamp(22px,3vw,30px);margin:12px 0 6px;font-weight:700;letter-spacing:-.02em}
+  header p{margin:0;color:#d6e2f5;max-width:70ch;font-size:15px}
+  .pill{display:inline-flex;align-items:center;gap:7px;font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--gold);font-weight:700;background:rgba(232,168,56,.12);border:1px solid rgba(232,168,56,.3);padding:5px 11px;border-radius:999px}
+  main{padding:26px 0 60px}
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px}
+  .seg{display:inline-flex;background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+  .seg button{border:0;background:transparent;padding:8px 13px;font:inherit;font-size:13px;color:var(--ink2);cursor:pointer}
+  .seg button.on{background:var(--brand);color:#fff;font-weight:600}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+  @media(max-width:760px){.kpis{grid-template-columns:1fr 1fr}}
+  .kpi{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+  .kpi .l{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+  .kpi .v{font-size:28px;font-weight:700;margin-top:4px}
+  .kpi .d{font-size:12.5px;font-weight:600;margin-top:2px}
+  .up{color:#0e8a5f}.down{color:#c0392b}
+  .grid{display:grid;grid-template-columns:1.6fr 1fr;gap:14px}
+  @media(max-width:860px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+  .card h3{margin:0 0 2px;font-size:15.5px}
+  .card .sub{margin:0 0 14px;font-size:12.5px;color:var(--muted);font-family:"Spline Sans Mono",monospace}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  @media(max-width:860px){.row2{grid-template-columns:1fr}}
+  .barline{display:flex;align-items:center;gap:10px;margin:9px 0}
+  .barline .name{width:120px;font-size:13px;color:var(--ink2);flex:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .barline .track{flex:1;background:#eef1f5;border-radius:6px;height:14px;overflow:hidden;display:block}
+  .barline .fill{display:block;height:14px;border-radius:6px}
+  .barline .n{width:44px;text-align:right;font-size:12.5px;color:var(--ink2);font-variant-numeric:tabular-nums}
+  .legend{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:12px;font-size:12.5px;color:var(--ink2)}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:10px;height:10px;border-radius:3px;flex:none}
+  .note{margin-top:18px;background:#eef3fb;border:1px solid #d6e2f5;border-radius:12px;padding:14px 16px;font-size:13.5px;color:#274063}
+  code{font-family:"Spline Sans Mono",monospace;font-size:12px;background:#e9eef6;padding:1px 6px;border-radius:5px}
+  pre{margin:10px 0 0;background:#0f2444;color:#dbe6f7;border-radius:10px;padding:14px;overflow:auto;font-family:"Spline Sans Mono",monospace;font-size:12px;line-height:1.5}
+  pre .t{color:#8fb7ef}.pre .s{color:#f6d79a}
+  footer{color:var(--muted);font-size:13px;padding:24px 0}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="top">
+      <span class="pill">Telemetría de producto</span>
+      <a class="back" href="index.html">← Volver a la galería</a>
+    </div>
+    <h1>Tablero de uso — Core · Áncora · Kullki</h1>
+    <p>Cuántas personas entran, a qué espacios van y desde qué dispositivo. Los eventos se emiten desde cada app con
+    <code>yd-telemetry.js</code> y el <b>mismo motor</b> los perfila. Datos de muestra.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="filters" role="group" aria-label="Filtros de ejemplo">
+    <div class="seg" role="tablist" aria-label="Rango">
+      <button class="on" type="button">7 días</button><button type="button">30 días</button><button type="button">90 días</button>
+    </div>
+    <div class="seg" aria-label="Producto">
+      <button class="on" type="button">Todos</button><button type="button">Core</button><button type="button">Áncora</button><button type="button">Kullki</button>
+    </div>
+  </div>
+
+  <section class="kpis" aria-label="Indicadores de uso">
+    <div class="kpi"><div class="l">Usuarios activos (WAU)</div><div class="v">2 148</div><div class="d up">▲ 9,4% vs. semana previa</div></div>
+    <div class="kpi"><div class="l">Sesiones</div><div class="v">6 032</div><div class="d up">▲ 6,1%</div></div>
+    <div class="kpi"><div class="l">Eventos</div><div class="v">48,7 k</div><div class="d up">▲ 12%</div></div>
+    <div class="kpi"><div class="l">Retención D7</div><div class="v">41%</div><div class="d down">▼ 1,3 pts</div></div>
+  </section>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Usuarios activos por día (DAU)</h3>
+      <p class="sub">métrica: uso_usuarios_por_dia · dim: dia</p>
+      <svg viewBox="0 0 640 220" width="100%" height="220" role="img" aria-label="Serie de usuarios activos por día, con tendencia creciente">
+        <g stroke="#eef1f5" stroke-width="1">
+          <line x1="40" y1="20" x2="620" y2="20"/><line x1="40" y1="65" x2="620" y2="65"/>
+          <line x1="40" y1="110" x2="620" y2="110"/><line x1="40" y1="155" x2="620" y2="155"/><line x1="40" y1="190" x2="620" y2="190"/>
+        </g>
+        <g fill="var(--muted)" font-size="11" font-family="Spline Sans Mono">
+          <text x="8" y="24">1500</text><text x="8" y="114">750</text><text x="20" y="194">0</text>
+        </g>
+        <polygon fill="rgba(42,120,214,.10)" points="40,150 123,140 206,120 289,128 372,96 455,88 538,60 620,44 620,190 40,190"/>
+        <polyline fill="none" stroke="var(--s1)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" points="40,150 123,140 206,120 289,128 372,96 455,88 538,60 620,44"/>
+        <g fill="var(--s1)">
+          <circle cx="40" cy="150" r="3.5"/><circle cx="123" cy="140" r="3.5"/><circle cx="206" cy="120" r="3.5"/><circle cx="289" cy="128" r="3.5"/><circle cx="372" cy="96" r="3.5"/><circle cx="455" cy="88" r="3.5"/><circle cx="538" cy="60" r="3.5"/><circle cx="620" cy="44" r="3.5"/>
+        </g>
+        <g fill="var(--muted)" font-size="10.5" font-family="Spline Sans Mono" text-anchor="middle">
+          <text x="40" y="208">lun</text><text x="123" y="208">mar</text><text x="206" y="208">mié</text><text x="289" y="208">jue</text><text x="372" y="208">vie</text><text x="455" y="208">sáb</text><text x="538" y="208">dom</text><text x="620" y="208">lun</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="card">
+      <h3>Usuarios por dispositivo</h3>
+      <p class="sub">métrica: uso_por_dispositivo</p>
+      <svg viewBox="0 0 220 200" width="100%" height="188" role="img" aria-label="Anillo: 58% escritorio, 34% móvil, 8% tablet">
+        <g transform="translate(110,96)" fill="none" stroke-width="30">
+          <circle r="62" stroke="#eef1f5" stroke-width="30"/>
+          <circle r="62" stroke="var(--s1)" stroke-dasharray="226 389" transform="rotate(-90)"/>
+          <circle r="62" stroke="var(--s3)" stroke-dasharray="132 389" stroke-dashoffset="-226" transform="rotate(-90)"/>
+          <circle r="62" stroke="var(--s4)" stroke-dasharray="31 389" stroke-dashoffset="-358" transform="rotate(-90)"/>
+        </g>
+        <text x="110" y="92" text-anchor="middle" font-size="26" font-weight="700" fill="var(--ink)">2,1k</text>
+        <text x="110" y="110" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="Spline Sans Mono">usuarios</text>
+      </svg>
+      <div class="legend">
+        <span><i class="dot" style="background:var(--s1)"></i> Escritorio 58%</span>
+        <span><i class="dot" style="background:var(--s3)"></i> Móvil 34%</span>
+        <span><i class="dot" style="background:var(--s4)"></i> Tablet 8%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row2">
+    <div class="card">
+      <h3>Pantallas más visitadas</h3>
+      <p class="sub">métrica: uso_top_pantallas · dim: pantalla</p>
+      <div class="barline"><span class="name">/core/riesgo</span><span class="track"><span class="fill" style="width:100%;background:var(--s1)"></span></span><span class="n">9,8k</span></div>
+      <div class="barline"><span class="name">/ancora/plan</span><span class="track"><span class="fill" style="width:74%;background:var(--s1)"></span></span><span class="n">7,3k</span></div>
+      <div class="barline"><span class="name">/kullki/aportes</span><span class="track"><span class="fill" style="width:61%;background:var(--s1)"></span></span><span class="n">6,0k</span></div>
+      <div class="barline"><span class="name">/core/reportes</span><span class="track"><span class="fill" style="width:48%;background:var(--s1)"></span></span><span class="n">4,7k</span></div>
+      <div class="barline"><span class="name">/kullki/creditos</span><span class="track"><span class="fill" style="width:36%;background:var(--s1)"></span></span><span class="n">3,5k</span></div>
+      <div class="barline"><span class="name">/ancora/recursos</span><span class="track"><span class="fill" style="width:29%;background:var(--s1)"></span></span><span class="n">2,8k</span></div>
+    </div>
+
+    <div class="card">
+      <h3>Usuarios por producto</h3>
+      <p class="sub">métrica: uso_por_producto · dim: producto</p>
+      <div class="barline"><span class="name">Core</span><span class="track"><span class="fill" style="width:100%;background:var(--s4)"></span></span><span class="n">980</span></div>
+      <div class="barline"><span class="name">Áncora</span><span class="track"><span class="fill" style="width:66%;background:var(--s2)"></span></span><span class="n">648</span></div>
+      <div class="barline"><span class="name">Kullki</span><span class="track"><span class="fill" style="width:53%;background:var(--s3)"></span></span><span class="n">520</span></div>
+      <div class="barline"><span class="name">Horarios</span><span class="track"><span class="fill" style="width:31%;background:var(--s1)"></span></span><span class="n">305</span></div>
+      <div class="barline"><span class="name">Guía</span><span class="track"><span class="fill" style="width:18%;background:var(--s5)"></span></span><span class="n">175</span></div>
+      <div class="note" style="margin-top:16px">Sin PII: <code>usuario_id</code> llega seudonimizado y los conteos de personas usan supresión k-anónima.</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <h3>Instrumenta una app en una línea</h3>
+    <p class="sub">el mismo endpoint /telemetry/collect para Core, Áncora, Kullki…</p>
+<pre>&lt;script src="https://analytics.yachaydeep.com/yd-telemetry.js"
+        data-endpoint="https://yachay-deep-analytics-production.up.railway.app/telemetry/collect"
+        data-producto="core"&gt;&lt;/script&gt;
+
+// evento a medida (opcional)
+ydTelemetry.track("click", { boton: "exportar" });</pre>
+  </div>
+</main>
+
+<footer class="wrap">Yachay Deep · Analytics — telemetría de producto (demo con datos de muestra). Tus datos y tus llaves nunca salen de tu servidor.</footer>
+</body>
+</html>

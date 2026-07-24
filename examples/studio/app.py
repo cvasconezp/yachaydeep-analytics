@@ -15,13 +15,13 @@ import os
 import re
 import tempfile
 
-from fastapi import FastAPI, UploadFile
+from fastapi import Body, FastAPI, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 
-from yd_analytics import build_model, ingest, make_router, registry
+from yd_analytics import build_model, ingest, make_router, registry, telemetry
 
 HERE = os.path.dirname(__file__)
 DB = os.path.join(HERE, "studio.db")
@@ -36,6 +36,23 @@ def get_engine() -> Engine:
 app = FastAPI(title="yd-analytics · Studio")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 app.include_router(make_router(get_engine=get_engine))   # /analytics/query, /assist, /graph
+
+# --- Telemetría de producto (uso de Core/Áncora/Kullki y otras apps) --------- #
+telemetry.ensure_events_table(_engine)
+telemetry.register_telemetry()   # publica uso_usuarios_activos, uso_top_pantallas, ...
+
+
+@app.post("/telemetry/collect")
+async def telemetry_collect(payload: dict = Body(...)):
+    """Recibe una tanda de eventos de uso desde una app de la casa.
+
+    Cuerpo: {"tenant": "core", "events": [{producto, evento, pantalla, usuario_id,
+    sesion_id, dispositivo, os, pais}, ...]}. `usuario_id` debe llegar seudonimizado.
+    Luego el uso se consulta con las métricas `uso_*` vía /analytics/query."""
+    events = payload.get("events") or []
+    tenant = payload.get("tenant", "default")
+    n = telemetry.record_events(get_engine(), events, tenant=tenant)
+    return {"stored": n}
 
 
 def _slug(name: str) -> str:
