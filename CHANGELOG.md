@@ -3,6 +3,18 @@
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/);
 versionado SemVer. El contrato manda: un cambio incompatible es *major*.
 
+## [0.3.0] — 2026-07 · firma de atribución
+
+### Añadido
+- **@yachaydeep-yd/dashboard**: componente `AttributionBadge` — firma
+  "Yachay Deep Analytics" en cursiva, esquina inferior derecha, con una franja de
+  acento. Auto-contenido (estilos en línea). La franja **adopta el color de la
+  página anfitriona** vía la variable CSS `--yd-accent` (o prop `attributionAccent`);
+  si no se define, usa el **cian propio de Analytics** (`#0E9AB8`, familia hielo/datos).
+  `<Dashboard attribution={false}>` la oculta (pensado para planes de pago).
+- Merge del piloto **Core "Vista General"** (`yd_analytics/apps/core.py`): declara
+  las tarjetas del Análisis Institucional como MetricSpecs con el mismo SQL (11 tests).
+
 ## [0.2.0] — 2026-07 · embebible en producción
 
 ### Añadido

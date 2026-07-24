@@ -1,6 +1,9 @@
 /* @yachaydeep-yd/dashboard — La "cara" del sistema de analítica de la casa.
    Componentes React que consumen el contrato y pintan con ECharts. */
 export { Dashboard } from "./Dashboard";
+export type { DashboardProps } from "./Dashboard";
+export { AttributionBadge, ANALYTICS_COLOR } from "./AttributionBadge";
+export type { AttributionBadgeProps } from "./AttributionBadge";
 export { Panel } from "./Panel";
 export { NetworkView } from "./NetworkView";
 export type { NetworkViewProps } from "./NetworkView";

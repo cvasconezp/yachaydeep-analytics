@@ -8,17 +8,35 @@
        <Dashboard spec={miDashboardSpec} />
      </QueryClientProvider>
 */
+import { AttributionBadge } from "./AttributionBadge";
 import { Panel } from "./Panel";
 import { useFilters } from "./filterStore";
 import type { DashboardSpec } from "./types";
 
-export function Dashboard({ spec }: { spec: DashboardSpec }) {
+export interface DashboardProps {
+  spec: DashboardSpec;
+  /** Muestra la firma "Yachay Deep Analytics" (esquina inferior derecha).
+   *  Por defecto true; ponlo en false en planes de pago. */
+  attribution?: boolean;
+  /** Tema del contenedor, para que la firma se lea bien. */
+  attributionTheme?: "light" | "dark";
+  /** Color de la franja de la firma. Por defecto adopta `--yd-accent` del host
+   *  (o el cian de Analytics si no está definida). */
+  attributionAccent?: string;
+}
+
+export function Dashboard({
+  spec,
+  attribution = true,
+  attributionTheme = "light",
+  attributionAccent,
+}: DashboardProps) {
   const filters = useFilters((s) => s.filters);
   const clear = useFilters((s) => s.clear);
   const activos = Object.values(filters);
 
   return (
-    <section className="yd-dashboard">
+    <section className="yd-dashboard" style={{ position: "relative" }}>
       <header className="yd-dashboard__head">
         <h2>{spec.titulo}</h2>
         <div className="yd-dashboard__filtros">
@@ -46,6 +64,10 @@ export function Dashboard({ spec }: { spec: DashboardSpec }) {
           </div>
         ))}
       </div>
+
+      {attribution && (
+        <AttributionBadge theme={attributionTheme} accent={attributionAccent} />
+      )}
     </section>
   );
 }

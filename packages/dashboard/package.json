@@ -1,6 +1,6 @@
 {
   "name": "@yachaydeep-yd/dashboard",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Yachay Deep Analytics — la cara del sistema: componentes React/ECharts para tableros interactivos, redes y mapas, embebibles en tus apps.",
   "license": "MIT",
   "author": "Yachay Deep",

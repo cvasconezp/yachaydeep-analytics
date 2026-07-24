@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Badge de atribución — Yachay Deep Analytics</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --brand:#1B3A6B; --brand-dark:#0F2444; --brand-light:#2B5AA0;
+    --gold:#E8A838; --gold-light:#F5C563;
+    --ice:#A8DCE8;
+    /* Propuesta de color de producto para Analytics: cian/hielo saturado */
+    --yd-cyan:#0E9AB8; --yd-cyan-dark:#0B7C93; --yd-cyan-light:#3FC0DA;
+    --ink:#101418; --muted:#6b7280; --border:#e4e3dc; --bg:#f4f5f2; --surface:#fff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Instrument Sans",system-ui,sans-serif;background:var(--bg);color:var(--ink);padding:32px 20px 60px}
+  .wrap{max-width:1080px;margin:0 auto}
+  h1{font-size:22px;margin:0 0 4px}
+  .lede{color:var(--muted);font-size:14px;margin:0 0 28px;max-width:70ch}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin:34px 0 12px;font-weight:600}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:760px){.row{grid-template-columns:1fr}}
+
+  /* --- Marco de "app anfitriona" (donde se embebe el tablero) --- */
+  .host{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--border);
+        background:var(--surface);box-shadow:0 12px 30px -14px rgba(15,36,68,.25);min-height:230px}
+  .host.dark{background:linear-gradient(160deg,#0F2444,#173456);border-color:#20385f}
+  .host .panelbar{height:34px;background:#fbfbf9;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;padding:0 12px}
+  .host.dark .panelbar{background:#12294a;border-color:#20385f}
+  .dot{width:9px;height:9px;border-radius:50%}
+  .demo-body{padding:18px}
+  /* mini gráficos decorativos */
+  .bars{display:flex;align-items:flex-end;gap:10px;height:120px;padding:10px 6px 0}
+  .bars span{flex:1;border-radius:5px 5px 0 0;background:var(--brand-light)}
+  .host.dark .bars span{background:#4f8fd6}
+  .cap{font-size:12px;color:var(--muted);margin:8px 2px 0}
+  .host.dark .cap{color:#9db4d6}
+
+  /* ===================== BADGE DE ATRIBUCIÓN ===================== */
+  .yda-badge{position:absolute;right:12px;bottom:12px;display:inline-flex;align-items:center;gap:8px;
+    padding:6px 12px 6px 10px;border-radius:999px;background:rgba(255,255,255,.92);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+    box-shadow:0 2px 10px -2px rgba(15,36,68,.25);border:1px solid rgba(15,36,68,.08);
+    font-size:12px;line-height:1;text-decoration:none;color:var(--brand-dark);cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease}
+  .yda-badge:hover{transform:translateY(-1px);box-shadow:0 6px 16px -4px rgba(15,36,68,.35)}
+  .yda-badge .mark{font-size:14px;line-height:1}
+  .yda-badge .txt{font-style:italic;font-weight:600;letter-spacing:.01em}
+  .yda-badge .txt small{font-style:italic;font-weight:500;color:var(--muted)}
+  /* la FRANJA que realza */
+  .yda-badge .stripe{width:4px;height:16px;border-radius:2px;background:linear-gradient(180deg,var(--yd-cyan-light),var(--yd-cyan-dark))}
+  .host.dark .yda-badge{background:rgba(16,32,58,.72);border-color:rgba(168,220,232,.22);color:#eaf2fb}
+  .host.dark .yda-badge .txt small{color:#9db4d6}
+
+  /* Variante B: pestaña con franja superior */
+  .yda-badge.tab{border-radius:10px;padding-top:9px}
+  .yda-badge.tab::before{content:"";position:absolute;left:10px;right:10px;top:0;height:3px;border-radius:0 0 3px 3px;
+    background:linear-gradient(90deg,var(--yd-cyan),var(--yd-cyan-light))}
+
+  /* Variante C (casa, incubación): dorado */
+  .yda-badge.gold .stripe{background:linear-gradient(180deg,var(--gold-light),var(--gold))}
+
+  .note{font-size:12.5px;color:var(--muted);margin-top:10px;padding-left:14px;border-left:3px solid var(--yd-cyan)}
+  .swatches{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+  .sw{display:flex;flex-direction:column;gap:6px;align-items:center;font-size:11px;color:var(--muted)}
+  .sw i{width:52px;height:52px;border-radius:12px;display:block;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Badge de atribución embebido — <span style="font-style:italic">Yachay Deep Analytics</span></h1>
+  <p class="lede">Cómo se vería la firma en la esquina inferior derecha cuando el tablero está embebido en tus apps o en las de terceros. Discreta, con una <b>franja que realza</b>, y enlaza a analytics.yachaydeep.com. Abajo, tres tratamientos y el color propuesto para Analytics.</p>
+
+  <h2>Variante A — píldora con franja lateral (recomendada)</h2>
+  <div class="row">
+    <div class="host">
+      <div class="panelbar"><span class="dot" style="background:#eb6834"></span><span class="dot" style="background:#eda100"></span><span class="dot" style="background:#1baf7a"></span></div>
+      <div class="demo-body">
+        <div class="bars"><span style="height:60%"></span><span style="height:85%"></span><span style="height:48%"></span><span style="height:95%"></span><span style="height:70%"></span><span style="height:38%"></span></div>
+        <div class="cap">Tablero embebido en tu app · datos en vivo</div>
+      </div>
+      <a class="yda-badge" href="#"><span class="stripe"></span><span class="mark">📊</span><span class="txt">Yachay Deep <small>Analytics</small></span></a>
+    </div>
+    <div class="host dark">
+      <div class="panelbar"><span class="dot" style="background:#eb6834"></span><span class="dot" style="background:#eda100"></span><span class="dot" style="background:#1baf7a"></span></div>
+      <div class="demo-body">
+        <div class="bars"><span style="height:55%"></span><span style="height:80%"></span><span style="height:62%"></span><span style="height:98%"></span><span style="height:44%"></span><span style="height:72%"></span></div>
+        <div class="cap">Mismo badge sobre fondo oscuro</div>
+      </div>
+      <a class="yda-badge" href="#"><span class="stripe"></span><span class="mark">📊</span><span class="txt">Yachay Deep <small>Analytics</small></span></a>
+    </div>
+  </div>
+
+  <h2>Variante B — pestaña con franja superior</h2>
+  <div class="row">
+    <div class="host">
+      <div class="panelbar"><span class="dot" style="background:#eb6834"></span><span class="dot" style="background:#eda100"></span><span class="dot" style="background:#1baf7a"></span></div>
+      <div class="demo-body"><div class="bars"><span style="height:70%"></span><span style="height:50%"></span><span style="height:88%"></span><span style="height:65%"></span><span style="height:40%"></span><span style="height:92%"></span></div><div class="cap">Franja superior a lo ancho del badge</div></div>
+      <a class="yda-badge tab" href="#"><span class="mark">📊</span><span class="txt">Yachay Deep <small>Analytics</small></span></a>
+    </div>
+    <div class="host dark">
+      <div class="panelbar"><span class="dot" style="background:#eb6834"></span><span class="dot" style="background:#eda100"></span><span class="dot" style="background:#1baf7a"></span></div>
+      <div class="demo-body"><div class="bars"><span style="height:64%"></span><span style="height:82%"></span><span style="height:52%"></span><span style="height:90%"></span><span style="height:48%"></span><span style="height:76%"></span></div><div class="cap">Sobre oscuro</div></div>
+      <a class="yda-badge tab" href="#"><span class="mark">📊</span><span class="txt">Yachay Deep <small>Analytics</small></span></a>
+    </div>
+  </div>
+
+  <h2>Variante C — versión casa (dorado), correcta HOY en incubación</h2>
+  <div class="row">
+    <div class="host">
+      <div class="panelbar"><span class="dot" style="background:#eb6834"></span><span class="dot" style="background:#eda100"></span><span class="dot" style="background:#1baf7a"></span></div>
+      <div class="demo-body"><div class="bars"><span style="height:58%"></span><span style="height:78%"></span><span style="height:46%"></span><span style="height:88%"></span><span style="height:66%"></span><span style="height:36%"></span></div><div class="cap">Franja dorada (acento de la casa)</div></div>
+      <a class="yda-badge gold" href="#"><span class="stripe"></span><span class="mark">📊</span><span class="txt">Yachay Deep <small>Analytics</small></span></a>
+    </div>
+    <div class="host dark">
+      <div class="panelbar"><span class="dot" style="background:#eb6834"></span><span class="dot" style="background:#eda100"></span><span class="dot" style="background:#1baf7a"></span></div>
+      <div class="demo-body"><div class="bars"><span style="height:52%"></span><span style="height:84%"></span><span style="height:60%"></span><span style="height:96%"></span><span style="height:42%"></span><span style="height:70%"></span></div><div class="cap">Sobre oscuro</div></div>
+      <a class="yda-badge gold" href="#"><span class="stripe"></span><span class="mark">📊</span><span class="txt">Yachay Deep <small>Analytics</small></span></a>
+    </div>
+  </div>
+
+  <h2>Color propuesto para Analytics (§7.3)</h2>
+  <div class="swatches">
+    <div class="sw"><i style="background:#0B7C93"></i>cian oscuro<br>#0B7C93</div>
+    <div class="sw"><i style="background:#0E9AB8"></i>cian base<br>#0E9AB8</div>
+    <div class="sw"><i style="background:#3FC0DA"></i>cian claro<br>#3FC0DA</div>
+    <div class="sw"><i style="background:#A8DCE8"></i>brand-ice<br>#A8DCE8</div>
+    <div class="sw"><i style="background:#E8A838"></i>dorado casa<br>#E8A838</div>
+    <div class="sw"><i style="background:#1B3A6B"></i>navy casa<br>#1B3A6B</div>
+  </div>
+  <p class="note">Racional: tu documento asocia los datos con el "hielo" (<code>brand-ice</code>). El cian es una saturación de esa familia, distinto de azul (Horario), teal (Guía) y verde (Kullki), y lejos del violeta reservado a terceros. Es una <b>propuesta para tu aprobación</b> — cambiarlo es una variable.</p>
+</div>
+</body>
+</html>

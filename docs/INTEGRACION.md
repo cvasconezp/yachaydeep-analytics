@@ -104,6 +104,28 @@ import { palette, format } from "@yachaydeep-yd/dashboard";
 La identidad visual (color, tipografía) vive en `@yachaydeep/brand`; no edites
 colores directamente en el consumidor.
 
+## 6. Firma de atribución
+
+El tablero muestra una firma discreta *"Yachay Deep Analytics"* en la esquina
+inferior derecha, con una franja de acento. Por defecto, **la franja adopta el
+color de tu app**: define la variable CSS `--yd-accent` en el contenedor (o pasa
+`attributionAccent`). Si no la defines, usa el cian propio de Analytics.
+
+```tsx
+// Opción 1: variable CSS (afecta a la firma automáticamente)
+<div style={{ ["--yd-accent" as any]: "#7c3aed" }}>
+  <Dashboard spec={spec} attributionTheme="light" />
+</div>
+
+// Opción 2: prop directa
+<Dashboard spec={spec} attributionAccent="#7c3aed" />
+
+// Ocultarla (plan de pago)
+<Dashboard spec={spec} attribution={false} />
+```
+
+`attributionTheme="dark"` ajusta el fondo de la firma para contenedores oscuros.
+
 ---
 
 ## Notas de seguridad
