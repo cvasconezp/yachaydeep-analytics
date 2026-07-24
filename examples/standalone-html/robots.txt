@@ -1,0 +1,12 @@
+# robots.txt — analytics.yachaydeep.com
+# Yachay Deep Analytics · en Yachay Deep Labs
+
+User-agent: *
+Allow: /
+
+# Artefactos de desarrollo (no deben indexarse)
+Disallow: /_inject_nav.py
+Disallow: /_nav.spec.mjs
+Disallow: /landing.spec.mjs
+
+Sitemap: https://analytics.yachaydeep.com/sitemap.xml
