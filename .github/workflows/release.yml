@@ -1,0 +1,34 @@
+name: Release (publish packages)
+
+# Publica @yachaydeep/analytics-contract y @yachaydeep/dashboard en npm al etiquetar
+# una versión (v0.2.0, v1.0.0, ...). Requiere el secreto NPM_TOKEN (npm automation
+# token con permiso de publicación en el scope @yachaydeep).
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+      - run: npm install
+      - run: npm run build
+      - run: npm run typecheck
+      # El contrato primero (el dashboard depende de él).
+      - name: Publicar contract
+        working-directory: packages/contract
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publicar dashboard
+        working-directory: packages/dashboard
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

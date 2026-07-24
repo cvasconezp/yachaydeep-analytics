@@ -14,7 +14,7 @@ export default function AnaliticaPage({ spec, red }) {
   return (
     <QueryClientProvider client={qc}>
       <Dashboard spec={spec} />
-      {/* forma graph con estilo VOSviewer */}
+      {/* forma graph — red con clúster/overlay */}
       <NetworkView data={red} colorBy="cluster" />
     </QueryClientProvider>
   );
@@ -25,5 +25,5 @@ export default function AnaliticaPage({ spec, red }) {
 `@tanstack/react-query`. El endpoint se configura con `VITE_ANALYTICS_API`.
 
 Componentes: `Dashboard` (runtime con cross-filtering + estado en URL), `Panel`
-(KPI/gráfico), `NetworkView` (redes, modos *cluster* y *overlay* estilo VOSviewer),
+(KPI/gráfico), `NetworkView` (redes, modos *cluster* y *overlay*),
 más los hooks `useMetric` / `useFilters` y el formateador es-EC.

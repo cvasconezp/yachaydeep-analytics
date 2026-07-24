@@ -7,6 +7,8 @@ export type { NetworkViewProps } from "./NetworkView";
 export { ChoroplethView } from "./ChoroplethView";
 export type { ChoroplethProps } from "./ChoroplethView";
 export { useMetric } from "./useMetric";
+export { configureAnalytics, analyticsBase, analyticsHeaders, analyticsCredentials } from "./client";
+export type { AnalyticsClientConfig } from "./client";
 export { useFilters } from "./filterStore";
 export { toEChartsOption, fmt } from "./chartOptions";
 export { toCSV, exportCSV, exportPNG } from "./export";

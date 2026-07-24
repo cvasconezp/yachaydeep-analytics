@@ -3,6 +3,25 @@
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/);
 versionado SemVer. El contrato manda: un cambio incompatible es *major*.
 
+## [0.2.0] — 2026-07 · embebible en producción
+
+### Añadido
+- **Autenticación por API key** (`yd_analytics.auth`): dependencias FastAPI
+  `make_auth` que validan la llave en **tiempo constante** y resuelven tenant/rol.
+  Modo abierto en desarrollo; cerrado con `YD_API_KEYS` / `YD_REQUIRE_AUTH`.
+- **Studio** cierra sus endpoints de datos (`/analytics/*`, `/report`, `/ingest`,
+  `/telemetry/collect`) y restringe CORS con `YD_ALLOWED_ORIGINS`.
+- **@yachaydeep/dashboard**: `configureAnalytics({ apiBase, apiKey })` — configura
+  la URL base y la API key en runtime (cabecera `X-API-Key`), para embeber el mismo
+  bundle en distintas apps sin recompilar.
+- **docs/INTEGRACION.md**: guía de integración de 10 minutos.
+- **Auditoría de exactitud** (`packages/py/audit_stats.py`): 74 verificaciones
+  cruzadas contra statsmodels / pymannkendall / scipy — 0 discrepancias.
+
+### Cambiado
+- Paquetes a `0.2.0`; `publishConfig.access = public` y metadata de publicación.
+- Se eliminan las referencias rezagadas a "VOSviewer" en el paquete y su README.
+
 ## [0.1.0] — 2026-07 · inicial
 
 ### Añadido
@@ -11,7 +30,7 @@ versionado SemVer. El contrato manda: un cambio incompatible es *major*.
   resolver forma→gráfico, SQL seguro con whitelist, caché versionada, autorización
   por rol, **profiler** de auto-perfilado y factoría `make_router`.
 - **@yachaydeep/dashboard** (React) — `Dashboard`, `Panel`, `NetworkView`
-  (estilo VOSviewer, modos *cluster* y *overlay*), hooks y formateador es-EC.
+  (redes, modos *cluster* y *overlay*), hooks y formateador es-EC.
 - **Sistema de diseño de gráficos**: paleta categórica **validada** con
   `scripts/validate_palette.js` (sin violeta, segura para daltonismo en claro y
   oscuro), `palette.ts`, y catálogo ampliado en `chartOptions.ts` (dona, apiladas,

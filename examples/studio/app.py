@@ -15,14 +15,15 @@ import os
 import re
 import tempfile
 
-from fastapi import Body, FastAPI, UploadFile
+from fastapi import Body, Depends, FastAPI, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 
-from yd_analytics import (MetricQuery, build_model, ingest, make_router, registry,
-                          report, run_query, stats, telemetry)
+from yd_analytics import (MetricQuery, build_model, ingest, make_auth, make_router,
+                          registry, report, run_query, stats, telemetry)
+from yd_analytics.auth import allowed_origins
 
 HERE = os.path.dirname(__file__)
 DB = os.path.join(HERE, "studio.db")
@@ -36,15 +37,31 @@ def get_engine() -> Engine:
 
 
 app = FastAPI(title="yd-analytics · Studio")
-app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
-app.include_router(make_router(get_engine=get_engine))   # /analytics/query, /assist, /graph
+
+# --- Autenticación por API key + CORS restringido --------------------------- #
+# En producción define YD_API_KEYS="clave:tenant:rol,..." (cierra el API) y
+# YD_ALLOWED_ORIGINS="https://tu-app.com,..." (restringe el navegador). Sin
+# llaves, arranca en modo ABIERTO (solo desarrollo) y avisa por log.
+auth = make_auth()
+_origins = allowed_origins(dev_open=not auth.require)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_origins,
+    allow_credentials=False,          # con "*" no se permiten credenciales (regla CORS)
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+# El router de datos (/analytics/query, /assist, /graph) usa la API key para
+# resolver el ROL; los endpoints extra abajo exigen una llave válida.
+app.include_router(make_router(get_engine=get_engine, get_role=auth.get_role))
+_protected = [Depends(auth.get_principal)]
 
 # --- Telemetría de producto (uso de Core/Áncora/Kullki y otras apps) --------- #
 telemetry.ensure_events_table(_engine)
 telemetry.register_telemetry()   # publica uso_usuarios_activos, uso_top_pantallas, ...
 
 
-@app.post("/telemetry/collect")
+@app.post("/telemetry/collect", dependencies=_protected)
 async def telemetry_collect(payload: dict = Body(...)):
     """Recibe una tanda de eventos de uso desde una app de la casa.
 
@@ -67,7 +84,7 @@ def index():
     return FileResponse(os.path.join(HERE, "studio.html"))
 
 
-@app.post("/ingest")
+@app.post("/ingest", dependencies=_protected)
 async def ingest_file(file: UploadFile):
     """Sube un archivo → limpia, perfila, registra métricas y propone un tablero."""
     suffix = os.path.splitext(file.filename or "datos.csv")[1] or ".csv"
@@ -113,7 +130,7 @@ def _panel_data(metric: str, dimensions: list[str] | None):
     return spec.titulo, r.shape, r.rows, r.columns
 
 
-@app.post("/analytics/stats")
+@app.post("/analytics/stats", dependencies=_protected)
 def analytics_stats(payload: dict = Body(...)):
     """Estadística real (descriptiva + inferencial) de una métrica."""
     metric = payload.get("metric")
@@ -123,7 +140,7 @@ def analytics_stats(payload: dict = Body(...)):
             "stats": stats.summarize_result(shape, rows, cols)}
 
 
-@app.post("/report")
+@app.post("/report", dependencies=_protected)
 def build_report_endpoint(payload: dict = Body(default={})):
     """Genera un INFORME en HTML con resúmenes de cada gráfico.
 

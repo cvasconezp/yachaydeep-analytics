@@ -1,9 +1,9 @@
-/* @yachaydeep/dashboard — NetworkView: la forma "graph" con estilo VOSviewer.
+/* @yachaydeep/dashboard — NetworkView: la forma «graph» — redes con clúster y overlay continuo.
 
    Render de redes: aristas curvas translúcidas coloreadas por el clúster de origen
    (sin flechas), nodos con sombreado de esfera y tamaño por peso, etiquetas al lado.
    Dos modos de color: "cluster" (comunidad, discreto) u "overlay" (atributo numérico
-   continuo, escala viridis con leyenda) — los dos modos característicos de VOSviewer.
+   continuo, escala viridis con leyenda) — los dos modos de visualización de redes.
 
    Requiere: npm i echarts react
 */

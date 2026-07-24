@@ -31,11 +31,11 @@ from .schemas import (
     MetricQuery, MetricResult, MetricSpec, PanelResponse,
 )
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 __all__ = [
     "run_query", "run_graph", "profile", "interpret", "openai_compatible_llm",
-    "ingest", "to_csv", "make_router",
+    "ingest", "to_csv", "make_router", "make_auth", "ApiKey",
     "detect_relationships", "build_model", "query_related", "Model", "Relationship",
     "TenantResolver", "Tenant", "make_get_engine", "tenant_from_host", "row_filter",
     "registry", "resolver", "graph",
@@ -63,6 +63,16 @@ def make_router(**kwargs):
     si solo se usa el motor). Ver yd_analytics.router.make_router."""
     from .router import make_router as _mk
     return _mk(**kwargs)
+
+
+def make_auth(**kwargs):
+    """Factoría de dependencias de autenticación por API key (import diferido:
+    requiere el extra `[api]` con FastAPI). Ver yd_analytics.auth.make_auth."""
+    from .auth import make_auth as _ma
+    return _ma(**kwargs)
+
+
+from .auth import ApiKey  # noqa: E402  (dataclass puro, sin FastAPI)
 
 
 def ingest(*args, **kwargs):

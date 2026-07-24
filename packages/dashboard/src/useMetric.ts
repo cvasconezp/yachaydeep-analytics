@@ -5,16 +5,15 @@
    Requiere: npm i @tanstack/react-query
 */
 import { useQuery } from "@tanstack/react-query";
+import { analyticsBase, analyticsCredentials, analyticsHeaders } from "./client";
 import { useFilters } from "./filterStore";
 import type { PanelResponse, PanelSpec } from "./types";
 
-const API = import.meta.env.VITE_ANALYTICS_API ?? "http://127.0.0.1:8000";
-
 async function fetchPanel(spec: PanelSpec, filters: unknown[]): Promise<PanelResponse> {
-  const res = await fetch(`${API}/analytics/query`, {
+  const res = await fetch(`${analyticsBase()}/analytics/query`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include", // cookie de sesión (yd.auth) → el backend deduce el rol
+    headers: analyticsHeaders(),           // Content-Type + X-API-Key (si se configuró)
+    credentials: analyticsCredentials(),   // cookie de sesión, o "omit" con API key
     body: JSON.stringify({
       metric: spec.metric,
       dimensions: spec.dimensions ?? [],
