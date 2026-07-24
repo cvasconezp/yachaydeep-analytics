@@ -1,23 +1,41 @@
 {
   "name": "@yachaydeep-yd/analytics-contract",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Contrato del sistema de analítica de Yachay Deep: tipos TS + JSON Schema.",
   "license": "MIT",
   "author": "Yachay Deep",
   "homepage": "https://analytics.yachaydeep.com",
-  "repository": { "type": "git", "url": "git+https://github.com/cvasconezp/yachaydeep-analytics.git", "directory": "packages/contract" },
-  "keywords": ["analytics", "contract", "json-schema", "typescript", "yachaydeep"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cvasconezp/yachaydeep-analytics.git",
+    "directory": "packages/contract"
+  },
+  "keywords": [
+    "analytics",
+    "contract",
+    "json-schema",
+    "typescript",
+    "yachaydeep"
+  ],
   "type": "module",
   "sideEffects": false,
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
-    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
     "./schema/*": "./schema/*"
   },
-  "files": ["dist", "schema"],
-  "publishConfig": { "access": "public" },
+  "files": [
+    "dist",
+    "schema"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts --clean",
     "typecheck": "tsc --noEmit",

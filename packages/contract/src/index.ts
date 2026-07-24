@@ -83,6 +83,10 @@ export interface GraphResult { graph: string; directed: boolean; nodes: GraphNod
 export interface PanelSpec {
   id: string; metric: string; dimensions?: string[]; grain?: string | null;
   chartHint?: ChartType | null; size?: "sm" | "md" | "lg";
+  /** Rótulo legible del panel (si falta, se usa el id de la métrica). */
+  titulo?: string;
+  /** Nota breve bajo el título (opcional). */
+  nota?: string;
 }
 export interface DashboardSpec {
   id: string; titulo: string; filtrosGlobales: string[]; paneles: PanelSpec[];

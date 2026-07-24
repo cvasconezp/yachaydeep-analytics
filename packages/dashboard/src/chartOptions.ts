@@ -26,7 +26,8 @@ const CAT = () => categorical(mode());
 export function fmt(value: number, formato: Formato): string {
   if (formato === "money") return money(value);
   if (formato === "percent") return percent(value);
-  return fmtNumber(value);
+  // Conteos enteros salen limpios; promedios y ratios conservan hasta 2 decimales.
+  return Number.isInteger(value) ? fmtNumber(value) : fmtNumber(value, 2);
 }
 
 export function toEChartsOption(chart: ChartSpec, result: MetricResult) {
