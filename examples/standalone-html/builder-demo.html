@@ -88,7 +88,26 @@ var Fr={},Gr={};var Wr,Hr=function(){function t(t,e,n){var i=this;this._sleepAft
   code{font-family:"Spline Sans Mono";font-size:12px;background:#eef1f5;padding:1px 5px;border-radius:5px}
 </style>
 </head>
-<body>
+<body><!--YDNAV--><style id="ydnav-style">
+.ydnav{position:sticky;top:0;z-index:9999;background:rgba(255,255,255,.94);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid #e4e3dc;font-family:'Spline Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.ydnav *{box-sizing:border-box}
+.ydnav .in{display:flex;align-items:center;gap:10px;max-width:1160px;margin:0 auto;padding:8px 18px}
+.ydnav a{text-decoration:none}
+.ydnav .home{display:inline-flex;align-items:center;gap:5px;color:#0F2444;font-weight:700;font-size:13px;white-space:nowrap}
+.ydnav .home svg{width:16px;height:16px;flex:0 0 auto}
+.ydnav .sep{width:1px;height:22px;background:#e4e3dc;flex:0 0 auto}
+.ydnav .strip{display:flex;gap:7px;overflow-x:auto;scroll-behavior:smooth;-ms-overflow-style:none;scrollbar-width:none;flex:1 1 auto;padding:2px 0}
+.ydnav .strip::-webkit-scrollbar{display:none}
+.ydnav .strip a{flex:0 0 auto;font-size:12.5px;line-height:1;padding:6px 11px;border-radius:999px;color:#52514e;border:1px solid #e4e3dc;background:#fff;white-space:nowrap;transition:border-color .12s,color .12s}
+.ydnav .strip a:hover{border-color:#c3c2b7;color:#0F2444}
+.ydnav .strip a.on{background:#0F2444;color:#fff;border-color:#0F2444;font-weight:600}
+.ydnav .step{display:flex;gap:5px;flex:0 0 auto}
+.ydnav .step a,.ydnav .step span{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:8px;border:1px solid #e4e3dc;color:#52514e;background:#fff}
+.ydnav .step a svg,.ydnav .step span svg{width:16px;height:16px}
+.ydnav .step span{opacity:.32;cursor:default}
+.ydnav .step a:hover{border-color:#c3c2b7;color:#0F2444}
+@media(max-width:620px){.ydnav .home span{display:none}.ydnav .in{gap:8px;padding:8px 12px}}
+</style><nav class="ydnav" aria-label="Navegación entre demos"><div class="in"><a class="home" href="index.html#demos" title="Volver a la galería de demos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Demos</span></a><div class="sep"></div><div class="strip" id="ydstrip" role="tablist"><a class="p" href="crossfilter-demo.html">Cross-highlighting</a><a class="p" href="gallery-demo.html">Galería de gráficos</a><a class="p" href="ask-demo.html">Pregúntale a tus datos</a><a class="p" href="ingest-demo.html">Sube y limpia</a><a class="p" href="model-editor-demo.html">Editor de relaciones</a><a class="p on" href="builder-demo.html" aria-current="page">Constructor de tablero</a><a class="p" href="network-demo.html">Grafo de redes</a><a class="p" href="graph-demo.html">Prerrequisitos</a><a class="p" href="dashboard-demo.html">Tablero interactivo</a><a class="p" href="telemetry-demo.html">Tablero de uso</a><a class="p" href="report-demo.html">Informe con estadística</a></div><div class="step"><a href="model-editor-demo.html" title="Anterior: Editor de relaciones" aria-label="Demo anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a href="network-demo.html" title="Siguiente: Grafo de redes" aria-label="Demo siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div></div></nav><script id="ydnav-js">(function(){var s=document.getElementById("ydstrip");if(!s)return;var on=s.querySelector("a.on");if(on){var l=on.offsetLeft-s.clientWidth/2+on.clientWidth/2;s.scrollTo({left:l>0?l:0});}})();</script><!--/YDNAV-->
 <div class="wrap">
   <div class="eyebrow">yd-analytics · constructor sin código</div>
   <h1>Arma tu tablero sin escribir código</h1>
