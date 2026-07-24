@@ -78,7 +78,13 @@ app.include_router(make_router(get_engine=get_engine, get_role=auth.get_role, as
 _protected = [Depends(auth.get_principal)]
 
 # --- Telemetría de producto (uso de Core/Áncora/Kullki y otras apps) --------- #
-telemetry.ensure_events_table(_engine)
+# La telemetría necesita ESCRIBIR; si ANALYTICS_DB_URL es una vista de solo lectura
+# (caso Core), no se puede crear la tabla — no debe tumbar el arranque. Las métricas
+# de datos (solo lectura) siguen funcionando; la telemetría de uso queda inactiva aquí.
+try:
+    telemetry.ensure_events_table(_engine)
+except Exception as _e:
+    print(f"[analytics] telemetría inactiva (¿BD de solo lectura?): {_e}")
 telemetry.register_telemetry()   # publica uso_usuarios_activos, uso_top_pantallas, ...
 
 # Métricas por app (Opción A: un backend, tenant por llave). Cada app declara las suyas
