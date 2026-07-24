@@ -10,7 +10,7 @@
     "examples/vite-app"
   ],
   "scripts": {
-    "build": "npm run build --workspace @yachaydeep/analytics-contract && npm run build --workspace @yachaydeep/dashboard",
+    "build": "npm run build --workspace @yachaydeep-yd/analytics-contract && npm run build --workspace @yachaydeep-yd/dashboard",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "schema": "python scripts/gen_schema.py"
   }

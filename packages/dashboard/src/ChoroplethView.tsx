@@ -1,4 +1,4 @@
-/* @yachaydeep/dashboard — ChoroplethView: mapa coroplético (forma "geo").
+/* @yachaydeep-yd/dashboard — ChoroplethView: mapa coroplético (forma "geo").
 
    Registra un GeoJSON en ECharts y pinta una región por magnitud con la rampa
    secuencial de la casa. El GeoJSON se pasa como prop (el paquete no fija ningún

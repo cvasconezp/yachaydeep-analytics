@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Dashboard, NetworkView } from "@yachaydeep/dashboard";
-import type { DashboardSpec, GraphResult } from "@yachaydeep/analytics-contract";
+import { Dashboard, NetworkView } from "@yachaydeep-yd/dashboard";
+import type { DashboardSpec, GraphResult } from "@yachaydeep-yd/analytics-contract";
 
 const API = import.meta.env.VITE_ANALYTICS_API ?? "http://127.0.0.1:8000";
 
@@ -26,7 +26,7 @@ export default function App() {
 
   return (
     <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-      <h2 style={{ padding: "16px 16px 0" }}>Ejemplo de consumo nativo de @yachaydeep/dashboard</h2>
+      <h2 style={{ padding: "16px 16px 0" }}>Ejemplo de consumo nativo de @yachaydeep-yd/dashboard</h2>
       <Dashboard spec={spec} />
       <div style={{ padding: 16 }}>
         <h3>Red de prerrequisitos (forma graph · estilo VOSviewer)</h3>

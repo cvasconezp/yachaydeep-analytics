@@ -35,14 +35,14 @@ rutas, con su sesión y su marca.
 
 Los **tres artefactos** del repo de analítica:
 
-1. **`@yachaydeep/analytics-contract`** — el contrato: los tipos y JSON Schema de `MetricSpec`,
+1. **`@yachaydeep-yd/analytics-contract`** — el contrato: los tipos y JSON Schema de `MetricSpec`,
    `MetricQuery`, `MetricResult`, `ChartSpec`, `GraphResult`. Es la **fuente de verdad** que ambas caras
    importan; publicado como paquete npm (tipos TS) y como JSON Schema (para validar en Python). Que las
    dos caras dependan de él es lo que **evita que se desincronicen**.
 2. **`yd-analytics`** (Python) — el **cerebro**: `registry`, `engine`, `sql_builder`, `resolver`,
    `graph`, `cache`, `security` y el `profiler` (§3). Se instala en el backend de cada app y expone un
    `APIRouter` que la app monta bajo `/analytics`.
-3. **`@yachaydeep/dashboard`** (npm/React) — la **cara**: `DashboardProvider`, `Panel`, `ChartRenderer`
+3. **`@yachaydeep-yd/dashboard`** (npm/React) — la **cara**: `DashboardProvider`, `Panel`, `ChartRenderer`
    (ECharts), `NetworkView` (grafos, con el tema estilo VOSviewer §5), `filterStore`, `useMetric`. Se
    instala en el frontend de cada app.
 
@@ -67,7 +67,7 @@ FastAPI de la app*. El usuario nunca sale de la aplicación. Cero iframes.
    App Áncora (repo propio)                      App Kullki (repo propio)
    ┌───────────────────────────┐                ┌───────────────────────────┐
    │ frontend (React)          │                │ frontend (React)          │
-   │  import @yachaydeep/       │                │  import @yachaydeep/       │
+   │  import @yachaydeep-yd/       │                │  import @yachaydeep-yd/       │
    │    dashboard  ─┐          │                │    dashboard  ─┐          │
    │  <Dashboard spec={…}/>    │                │  <Dashboard spec={…}/>    │
    │  tokens: ámbar            │                │  tokens: verde            │
@@ -80,7 +80,7 @@ FastAPI de la app*. El usuario nunca sale de la aplicación. Cero iframes.
             ▼                                             ▼
    ┌──────────────────────────────────────────────────────────────────────┐
    │           repo  yachaydeep-analytics  (fuente única)                   │
-   │   @yachaydeep/analytics-contract · yd-analytics (py) · @yd/dashboard   │
+   │   @yachaydeep-yd/analytics-contract · yd-analytics (py) · @yd/dashboard   │
    └──────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -120,7 +120,7 @@ propuesto → publicar. No se parte de una hoja en blanco.
 Seis pasos, una sola vez por producto:
 
 1. **Instalar por versión** los tres artefactos: `pip install yd-analytics==X.Y.Z` (backend) y
-   `npm i @yachaydeep/dashboard@X.Y.Z @yachaydeep/analytics-contract@X.Y.Z` (frontend).
+   `npm i @yachaydeep-yd/dashboard@X.Y.Z @yachaydeep-yd/analytics-contract@X.Y.Z` (frontend).
 2. **Montar el router** en su FastAPI: `app.include_router(yd_analytics.router)` → aparece `/analytics/*`.
 3. **Conectar su BD y su rol:** el engine lee la BD del producto (réplica de lectura) y el rol sale de
    `yd.auth`. Autorización por métrica incluida.
@@ -172,9 +172,9 @@ prerrequisitos, overlay por tasa de aprobación → ves qué asignaturas "críti
 ```
 yachaydeep-analytics/
 ├── packages/
-│   ├── contract/            @yachaydeep/analytics-contract  (tipos TS + JSON Schema)
+│   ├── contract/            @yachaydeep-yd/analytics-contract  (tipos TS + JSON Schema)
 │   ├── py/                  yd-analytics  (registry, engine, resolver, graph, profiler, security)
-│   └── dashboard/           @yachaydeep/dashboard  (Provider, Panel, ChartRenderer, NetworkView)
+│   └── dashboard/           @yachaydeep-yd/dashboard  (Provider, Panel, ChartRenderer, NetworkView)
 ├── examples/                apps mínimas de demostración (las que ya tienes de referencia)
 ├── docs/                    DASHBOARD.md · DISTRIBUCION.md · DATA_DICTIONARY (plantilla)
 └── .github/workflows/       CI: tests + publicación de los 3 artefactos por versión

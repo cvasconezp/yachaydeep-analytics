@@ -1,4 +1,4 @@
-/* @yachaydeep/dashboard — La "cara" del sistema de analítica de la casa.
+/* @yachaydeep-yd/dashboard — La "cara" del sistema de analítica de la casa.
    Componentes React que consumen el contrato y pintan con ECharts. */
 export { Dashboard } from "./Dashboard";
 export { Panel } from "./Panel";

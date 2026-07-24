@@ -11,7 +11,7 @@ versionado SemVer. El contrato manda: un cambio incompatible es *major*.
   Modo abierto en desarrollo; cerrado con `YD_API_KEYS` / `YD_REQUIRE_AUTH`.
 - **Studio** cierra sus endpoints de datos (`/analytics/*`, `/report`, `/ingest`,
   `/telemetry/collect`) y restringe CORS con `YD_ALLOWED_ORIGINS`.
-- **@yachaydeep/dashboard**: `configureAnalytics({ apiBase, apiKey })` — configura
+- **@yachaydeep-yd/dashboard**: `configureAnalytics({ apiBase, apiKey })` — configura
   la URL base y la API key en runtime (cabecera `X-API-Key`), para embeber el mismo
   bundle en distintas apps sin recompilar.
 - **docs/INTEGRACION.md**: guía de integración de 10 minutos.
@@ -25,11 +25,11 @@ versionado SemVer. El contrato manda: un cambio incompatible es *major*.
 ## [0.1.0] — 2026-07 · inicial
 
 ### Añadido
-- **@yachaydeep/analytics-contract** — tipos TS + JSON Schema (generado desde Pydantic).
+- **@yachaydeep-yd/analytics-contract** — tipos TS + JSON Schema (generado desde Pydantic).
 - **yd-analytics** (Python) — motor tabular (`run_query`), grafos (`run_graph`),
   resolver forma→gráfico, SQL seguro con whitelist, caché versionada, autorización
   por rol, **profiler** de auto-perfilado y factoría `make_router`.
-- **@yachaydeep/dashboard** (React) — `Dashboard`, `Panel`, `NetworkView`
+- **@yachaydeep-yd/dashboard** (React) — `Dashboard`, `Panel`, `NetworkView`
   (redes, modos *cluster* y *overlay*), hooks y formateador es-EC.
 - **Sistema de diseño de gráficos**: paleta categórica **validada** con
   `scripts/validate_palette.js` (sin violeta, segura para daltonismo en claro y

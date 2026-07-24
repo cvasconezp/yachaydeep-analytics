@@ -37,7 +37,7 @@ Tres reglas de casa que este módulo hace cumplir por diseño:
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
-│  FRONTEND  ·  @yachaydeep/dashboard  (React + Vite + ECharts)              │
+│  FRONTEND  ·  @yachaydeep-yd/dashboard  (React + Vite + ECharts)              │
 │                                                                            │
 │   DashboardSpec ──► DashboardRuntime ──► Panel[] ──► ChartRenderer(ECharts)│
 │                          │   ▲                                             │
@@ -65,7 +65,7 @@ Tres reglas de casa que este módulo hace cumplir por diseño:
 | **Motor de métricas** (`engine.py`) | `backend/yd/analytics/` | Resolver una `MetricQuery` → SQL → ejecutar → devolver `MetricResult` normalizado + forma |
 | **Resolver de gráficos** (`resolver.py`) | `backend/yd/analytics/` | Interpretar la forma de la métrica y elegir el gráfico predeterminado (`ChartSpec`) |
 | **Caché** (`cache.py`) | `backend/yd/analytics/` | Cachear resultados por (métrica + filtros + versión); invalidar por cadencia |
-| **Runtime de tablero** | `@yachaydeep/dashboard` (front) | Renderizar paneles, manejar filtros compartidos, drill e interacción |
+| **Runtime de tablero** | `@yachaydeep-yd/dashboard` (front) | Renderizar paneles, manejar filtros compartidos, drill e interacción |
 | **Contrato** | `app/routers/analytics.py` + tipos TS | La frontera HTTP tipada entre front y back |
 
 > **Por qué esta separación.** El resolver de gráficos puede vivir en el backend (elige la
@@ -323,7 +323,7 @@ backend/yd/analytics/          # módulo compartido de casa (nuevo)
 
 backend/app/routers/analytics.py   # expone el contrato HTTP (consume yd.analytics)
 
-frontend/  →  @yachaydeep/dashboard    # paquete de casa (nuevo)
+frontend/  →  @yachaydeep-yd/dashboard    # paquete de casa (nuevo)
 ├── DashboardProvider.tsx      # contexto + FilterStore (Zustand + estado en URL)
 ├── DashboardRuntime.tsx       # lee DashboardSpec, coloca paneles (react-grid-layout)
 ├── Panel.tsx                  # un panel: useMetric → ChartRenderer

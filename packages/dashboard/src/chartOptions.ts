@@ -1,4 +1,4 @@
-/* @yachaydeep/dashboard — Traductor ChartSpec + MetricResult → opciones de ECharts.
+/* @yachaydeep-yd/dashboard — Traductor ChartSpec + MetricResult → opciones de ECharts.
 
    El resolver del backend ya decidió QUÉ gráfico; aquí solo lo pintamos con los
    tokens de marca y el formateador es-EC. Ningún número se imprime sin pasar por

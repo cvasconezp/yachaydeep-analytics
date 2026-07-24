@@ -1,4 +1,4 @@
-/* @yachaydeep/dashboard — Formato canónico es-EC (miles con punto, coma decimal).
+/* @yachaydeep-yd/dashboard — Formato canónico es-EC (miles con punto, coma decimal).
    Réplica del formateador de la casa (frontend/src/lib/format.ts). ÚNICO formateador:
    ningún número se imprime sin pasar por aquí. */
 const LOCALE = "es-EC";

@@ -1,4 +1,4 @@
-/* @yachaydeep/dashboard — Exportación de un panel: CSV y PNG.
+/* @yachaydeep-yd/dashboard — Exportación de un panel: CSV y PNG.
    Exporta los AGREGADOS mostrados (nunca filas crudas de PII). */
 import type { MetricResult } from "./types";
 

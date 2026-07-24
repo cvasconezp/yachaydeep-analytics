@@ -1,5 +1,5 @@
 {
-  "name": "@yachaydeep/dashboard",
+  "name": "@yachaydeep-yd/dashboard",
   "version": "0.2.0",
   "description": "Yachay Deep Analytics — la cara del sistema: componentes React/ECharts para tableros interactivos, redes y mapas, embebibles en tus apps.",
   "license": "MIT",
@@ -28,7 +28,7 @@
     "@tanstack/react-query": ">=5"
   },
   "dependencies": {
-    "@yachaydeep/analytics-contract": "^0.2.0"
+    "@yachaydeep-yd/analytics-contract": "^0.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.0",

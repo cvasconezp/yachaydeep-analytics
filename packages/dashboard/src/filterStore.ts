@@ -1,4 +1,4 @@
-/* @yachaydeep/dashboard — Estado de filtros compartido (cross-filtering).
+/* @yachaydeep-yd/dashboard — Estado de filtros compartido (cross-filtering).
 
    Zustand + sincronización con la URL (tablero compartible, respeta atrás/adelante).
    Todos los paneles leen de aquí; al hacer clic en una marca, el panel emite un

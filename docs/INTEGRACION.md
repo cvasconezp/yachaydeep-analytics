@@ -2,9 +2,9 @@
 
 Guía para embeber tableros de **Yachay Deep Analytics** dentro de una app React
 (Core, Áncora, Kullki o cualquier app tuya). Dos piezas: el **paquete de la cara**
-(`@yachaydeep/dashboard`) y el **API con estadística real** (el Studio / backend).
+(`@yachaydeep-yd/dashboard`) y el **API con estadística real** (el Studio / backend).
 
-> Versión de los paquetes: `0.2.0`. El contrato (`@yachaydeep/analytics-contract`)
+> Versión de los paquetes: `0.2.0`. El contrato (`@yachaydeep-yd/analytics-contract`)
 > es la superficie pública; fija una versión y actualiza a conciencia.
 
 ---
@@ -12,7 +12,7 @@ Guía para embeber tableros de **Yachay Deep Analytics** dentro de una app React
 ## 1. Instala el paquete y sus dependencias
 
 ```bash
-npm install @yachaydeep/dashboard @yachaydeep/analytics-contract
+npm install @yachaydeep-yd/dashboard @yachaydeep-yd/analytics-contract
 # dependencias peer (si aún no están en tu app):
 npm install react echarts echarts-for-react zustand @tanstack/react-query
 ```
@@ -22,7 +22,7 @@ npm install react echarts echarts-for-react zustand @tanstack/react-query
 En el arranque de tu app, una sola vez:
 
 ```ts
-import { configureAnalytics } from "@yachaydeep/dashboard";
+import { configureAnalytics } from "@yachaydeep-yd/dashboard";
 
 configureAnalytics({
   apiBase: "https://analytics.yachaydeep.com",   // tu backend
@@ -38,8 +38,8 @@ Con `apiKey` definido, cada petición envía la cabecera `X-API-Key` y usa
 
 ```tsx
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Dashboard } from "@yachaydeep/dashboard";
-import "@yachaydeep/dashboard/dist/style.css"; // si tu bundler lo requiere
+import { Dashboard } from "@yachaydeep-yd/dashboard";
+import "@yachaydeep-yd/dashboard/dist/style.css"; // si tu bundler lo requiere
 
 const qc = new QueryClient();
 
@@ -98,7 +98,7 @@ curl -s https://analytics.yachaydeep.com/analytics/query \
 La paleta y el formateo son accesibles (validados para daltonismo) y se exportan:
 
 ```ts
-import { palette, format } from "@yachaydeep/dashboard";
+import { palette, format } from "@yachaydeep-yd/dashboard";
 ```
 
 La identidad visual (color, tipografía) vive en `@yachaydeep/brand`; no edites

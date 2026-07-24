@@ -1,4 +1,4 @@
-/* @yachaydeep/dashboard — NetworkView: la forma «graph» — redes con clúster y overlay continuo.
+/* @yachaydeep-yd/dashboard — NetworkView: la forma «graph» — redes con clúster y overlay continuo.
 
    Render de redes: aristas curvas translúcidas coloreadas por el clúster de origen
    (sin flechas), nodos con sombreado de esfera y tamaño por peso, etiquetas al lado.

@@ -1,4 +1,4 @@
-/* @yachaydeep/dashboard — Runtime del tablero.
+/* @yachaydeep-yd/dashboard — Runtime del tablero.
 
    Lee un DashboardSpec, coloca los paneles en grilla y ofrece los slicers de los
    filtros globales + un botón de limpiar. Todo cuelga del FilterStore compartido.

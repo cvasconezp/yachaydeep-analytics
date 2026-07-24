@@ -37,9 +37,9 @@ Se usa de **dos formas**:
 
 | Paquete | Qué es | Instala |
 |---|---|---|
-| `@yachaydeep/analytics-contract` | El **contrato**: tipos TS + JSON Schema | `npm i @yachaydeep/analytics-contract` |
+| `@yachaydeep-yd/analytics-contract` | El **contrato**: tipos TS + JSON Schema | `npm i @yachaydeep-yd/analytics-contract` |
 | `yd-analytics` (Python) | El **cerebro**: motor, resolver, grafos, model, profiler, ingest, assist, tenancy | `pip install "yd-analytics[api]"` |
-| `@yachaydeep/dashboard` (React) | La **cara**: `Dashboard`, `Panel`, `NetworkView`, `ChoroplethView` | `npm i @yachaydeep/dashboard` |
+| `@yachaydeep-yd/dashboard` (React) | La **cara**: `Dashboard`, `Panel`, `NetworkView`, `ChoroplethView` | `npm i @yachaydeep-yd/dashboard` |
 
 ## Estructura
 
@@ -49,11 +49,11 @@ yachaydeep-analytics/
 │   ├── contract/    tipos TS + JSON Schema (generado desde Pydantic)
 │   ├── py/          yd-analytics (registry, engine, resolver, graph, model, profiler,
 │   │                ingest, assist, tenancy, security, export, router) + tests
-│   └── dashboard/   @yachaydeep/dashboard (componentes React/ECharts + paleta validada)
+│   └── dashboard/   @yachaydeep-yd/dashboard (componentes React/ECharts + paleta validada)
 ├── examples/
 │   ├── studio/          app "sube tus datos → tablero" (FastAPI + UI)  ← autoservicio
 │   ├── backend-demo/    app FastAPI mínima que monta make_router
-│   ├── vite-app/        app React que consume @yachaydeep/dashboard (nativo)
+│   ├── vite-app/        app React que consume @yachaydeep-yd/dashboard (nativo)
 │   └── standalone-html/ 9 demos autocontenidos (abrir en el navegador)
 ├── docs/            DASHBOARD · DISTRIBUCION · DESIGN-SYSTEM · VS-POWERBI · SEGURIDAD-DATOS
 │                    · ESCALA · MULTI-TENANT · DESPLIEGUE
@@ -91,7 +91,7 @@ from yd_analytics import make_router
 app.include_router(make_router(get_engine=get_engine, get_role=deps_de_yd_auth))
 ```
 ```tsx
-import { Dashboard, NetworkView } from "@yachaydeep/dashboard";
+import { Dashboard, NetworkView } from "@yachaydeep-yd/dashboard";
 <Dashboard spec={miDashboardSpec} />
 ```
 El mismo tablero se ve **ámbar en Áncora y verde en Kullki** sin tocar el paquete.

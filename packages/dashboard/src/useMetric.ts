@@ -1,4 +1,4 @@
-/* @yachaydeep/dashboard — Hook de consulta de una métrica.
+/* @yachaydeep-yd/dashboard — Hook de consulta de una métrica.
 
    Llama al contrato POST /analytics/query con los filtros globales activos.
    Usa TanStack Query para caché, reintentos y estados de carga.

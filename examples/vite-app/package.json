@@ -9,8 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@yachaydeep/dashboard": "*",
-    "@yachaydeep/analytics-contract": "*",
+    "@yachaydeep-yd/dashboard": "*",
+    "@yachaydeep-yd/analytics-contract": "*",
     "@tanstack/react-query": "^5.51.0",
     "echarts": "^5.5.0",
     "echarts-for-react": "^3.0.2",

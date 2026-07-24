@@ -1,11 +1,11 @@
-/* @yachaydeep/dashboard — Configuración runtime del cliente de analítica.
+/* @yachaydeep-yd/dashboard — Configuración runtime del cliente de analítica.
 
    Permite fijar, desde la app anfitriona y en tiempo de ejecución, la URL base del
    API, una API key (se envía como cabecera `X-API-Key`) y cabeceras extra. Así el
    mismo bundle sirve para embeber en distintas apps sin recompilar.
 
    Uso:
-     import { configureAnalytics } from "@yachaydeep/dashboard";
+     import { configureAnalytics } from "@yachaydeep-yd/dashboard";
      configureAnalytics({ apiBase: "https://analytics.yachaydeep.com", apiKey: "..." });
 */
 

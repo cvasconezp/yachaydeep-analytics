@@ -88,7 +88,7 @@ para una); marcas finas, extremos redondeados 4px; hover por defecto.
 
 ## 3. Componentes y estados
 
-Cada componente de la cara (`@yachaydeep/dashboard`) define sus estados:
+Cada componente de la cara (`@yachaydeep-yd/dashboard`) define sus estados:
 
 | Componente | Default | Hover | Cargando | Vacío | Error |
 |---|---|---|---|---|---|

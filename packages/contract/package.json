@@ -1,5 +1,5 @@
 {
-  "name": "@yachaydeep/analytics-contract",
+  "name": "@yachaydeep-yd/analytics-contract",
   "version": "0.2.0",
   "description": "Contrato del sistema de analítica de Yachay Deep: tipos TS + JSON Schema.",
   "license": "MIT",

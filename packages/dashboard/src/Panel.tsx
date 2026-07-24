@@ -1,4 +1,4 @@
-/* @yachaydeep/dashboard — Un panel: consulta una métrica y la pinta.
+/* @yachaydeep-yd/dashboard — Un panel: consulta una métrica y la pinta.
    Requiere: npm i echarts echarts-for-react
 */
 import { useMemo } from "react";

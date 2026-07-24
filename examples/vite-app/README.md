@@ -1,6 +1,6 @@
 # Ejemplo · Vite (consumo nativo)
 
-Muestra cómo una app monta `@yachaydeep/dashboard` en **sus propias rutas** (no
+Muestra cómo una app monta `@yachaydeep-yd/dashboard` en **sus propias rutas** (no
 embebido), con sus tokens de marca. Consume el backend del ejemplo hermano.
 
 ```bash

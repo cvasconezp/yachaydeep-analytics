@@ -1,4 +1,4 @@
-/* @yachaydeep/dashboard — Paleta y tokens de gráfico (sistema de diseño).
+/* @yachaydeep-yd/dashboard — Paleta y tokens de gráfico (sistema de diseño).
 
    Construido con el método de la skill `dataviz`: el color se COMPUTA, no se estima.
    La paleta categórica de la casa se validó con scripts/validate_palette.js —

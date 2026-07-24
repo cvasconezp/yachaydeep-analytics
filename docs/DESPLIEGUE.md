@@ -72,12 +72,12 @@ El front resuelve el inquilino con `tenant_from_host(host)` (ver MULTI-TENANT.md
 
 ## 5. Publicar los paquetes (opcional, para instalar en Core/Áncora/Kullki)
 
-- **npm** (`@yachaydeep/analytics-contract`, `@yachaydeep/dashboard`):
+- **npm** (`@yachaydeep-yd/analytics-contract`, `@yachaydeep-yd/dashboard`):
   `npm publish --access restricted` desde cada `packages/*` (o GitHub Packages).
 - **PyPI / GitHub Packages** (`yd-analytics`): `python -m build && twine upload dist/*`
   (o instala por git: `pip install "yd-analytics @ git+https://github.com/cvasconezp/yachaydeep-analytics#subdirectory=packages/py"`).
 
-Así cada app hace `npm i @yachaydeep/dashboard` y `pip install yd-analytics` por versión.
+Así cada app hace `npm i @yachaydeep-yd/dashboard` y `pip install yd-analytics` por versión.
 
 ## 6. Checklist
 

@@ -1,4 +1,4 @@
-/* @yachaydeep/analytics-contract
+/* @yachaydeep-yd/analytics-contract
    Fuente de verdad de los tipos del sistema de analítica de la casa.
    Espejo de yd_analytics.schemas (Python). Los JSON Schema en ./schema se generan
    desde los modelos Pydantic (scripts/gen_schema.py) para validación cross-lenguaje. */

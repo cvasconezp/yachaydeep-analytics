@@ -1,12 +1,12 @@
-# @yachaydeep/dashboard
+# @yachaydeep-yd/dashboard
 
 La **cara** del sistema de analítica de la casa: componentes React que consumen el
-contrato (`@yachaydeep/analytics-contract`) y pintan con ECharts. Se monta *dentro*
+contrato (`@yachaydeep-yd/analytics-contract`) y pintan con ECharts. Se monta *dentro*
 de cada app (Core, Áncora, Kullki), con su marca y su sesión — nunca embebido.
 
 ```tsx
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Dashboard, NetworkView } from "@yachaydeep/dashboard";
+import { Dashboard, NetworkView } from "@yachaydeep-yd/dashboard";
 
 const qc = new QueryClient();
 
